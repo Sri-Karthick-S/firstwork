@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firstwork — Real Experience From Day One</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Epilogue:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --surface: #131316;
+  --surface2: #1a1a1f;
+  --surface3: #202028;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f2f1ee;
+  --muted: #888885;
+  --muted2: #555552;
+  --gold: #d4a843;
+  --gold-dim: rgba(212,168,67,0.12);
+  --gold-mid: rgba(212,168,67,0.3);
+  --green: #3ecf8e;
+  --green-dim: rgba(62,207,142,0.1);
+  --blue: #4f8ef7;
+  --blue-dim: rgba(79,142,247,0.1);
+  --red: #e05252;
+  --red-dim: rgba(224,82,82,0.1);
+  --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 1.75rem;
+  background: rgba(12,12,14,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-family:'Epilogue',sans-serif; font-weight:900; font-size:1.15rem;
+  letter-spacing:-0.5px; color:var(--text);
+  display:flex; align-items:center; gap:0.4rem;
+}
+.brand-accent { color:var(--gold); font-family:'Instrument Serif',serif; font-style:italic; }
+.nav-center { display:flex; gap:0.1rem; }
+.ntab {
+  padding:0.35rem 1rem; border-radius:6px; font-size:0.82rem; font-weight:600;
+  background:none; border:none; color:var(--muted); cursor:pointer;
+  transition:all 0.15s; font-family:'Epilogue',sans-serif; letter-spacing:0.01em;
+}
+.ntab:hover { color:var(--text); background:var(--surface2); }
+.ntab.active { color:var(--text); background:var(--surface2); }
+.ntab.active::after { display:none; }
+.nav-r { display:flex; align-items:center; gap:0.6rem; }
+.user-chip {
+  display:flex; align-items:center; gap:0.5rem;
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:20px; padding:0.2rem 0.7rem 0.2rem 0.25rem;
+  cursor:pointer; transition:border-color 0.15s;
+}
+.user-chip:hover { border-color:var(--gold-mid); }
+.uava {
+  width:26px; height:26px; border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#c4622a);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.6rem; font-weight:800; color:#0c0c0e;
+}
+.user-chip span { font-size:0.79rem; font-weight:600; }
+
+/* ── APP ── */
+.app { padding-top:56px; position:relative; z-index:1; }
+.page { display:none; }
+.page.active { display:block; animation: pageIn 0.3s ease; }
+@keyframes pageIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.wrap { max-width:1080px; margin:0 auto; padding:2.5rem 1.75rem; }
+
+/* ── PRIMITIVES ── */
+.btn {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  padding:0.55rem 1.25rem; border-radius:8px; font-size:0.82rem; font-weight:700;
+  cursor:pointer; border:none; transition:all 0.15s;
+  font-family:'Epilogue',sans-serif; letter-spacing:0.01em;
+}
+.btn-gold { background:var(--gold); color:#0c0c0e; }
+.btn-gold:hover { background:#e0b84e; transform:translateY(-1px); box-shadow:0 4px 20px rgba(212,168,67,0.3); }
+.btn-light { background:var(--text); color:#0c0c0e; }
+.btn-light:hover { background:#e0dfdb; transform:translateY(-1px); }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border2); }
+.btn-ghost:hover { color:var(--text); border-color:rgba(255,255,255,0.2); background:var(--surface2); }
+.btn-green { background:var(--green); color:#0c0c0e; }
+.btn-green:hover { background:#4fde9f; transform:translateY(-1px); }
+.btn-sm { padding:0.33rem 0.85rem; font-size:0.75rem; }
+
+.tag {
+  display:inline-block; padding:0.18rem 0.6rem; border-radius:4px;
+  font-size:0.7rem; font-weight:700; letter-spacing:0.03em;
+  font-family:'Epilogue',sans-serif;
+}
+.tg { background:var(--surface3); color:var(--muted); border:1px solid var(--border); }
+.tgold { background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold-mid); }
+.tgreen { background:var(--green-dim); color:var(--green); border:1px solid rgba(62,207,142,0.25); }
+.tblue { background:var(--blue-dim); color:var(--blue); border:1px solid rgba(79,142,247,0.2); }
+.tred { background:var(--red-dim); color:var(--red); border:1px solid rgba(224,82,82,0.2); }
+
+.card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:1.5rem;
+  box-shadow:var(--shadow);
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover { border-color:var(--border2); }
+.card-hover:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+
+.sh { font-size:0.68rem; font-weight:700; color:var(--muted2); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.85rem; }
+
+/* ═══ LANDING ═══ */
+#landing { }
+.landing-hero {
+  min-height: calc(100vh - 56px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:4rem 2rem;
+  position:relative;
+}
+.hero-glow {
+  position:absolute; top:20%; left:50%; transform:translateX(-50%);
+  width:600px; height:300px;
+  background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:20px; padding:0.3rem 0.85rem;
+  font-size:0.75rem; font-weight:600; color:var(--muted);
+  margin-bottom:2rem; letter-spacing:0.04em;
+}
+.hero-eyebrow span { color:var(--gold); }
+.hero-h1 {
+  font-family:'Epilogue',sans-serif; font-weight:900;
+  font-size:clamp(2.8rem, 6vw, 4.5rem); line-height:1.0;
+  letter-spacing:-2px; margin-bottom:1.25rem;
+  max-width:800px;
+}
+.hero-h1 em {
+  font-family:'Instrument Serif',serif; font-style:italic;
+  font-weight:400; color:var(--gold); letter-spacing:-1px;
+}
+.hero-sub {
+  font-size:1rem; color:var(--muted); max-width:520px;
+  line-height:1.7; margin-bottom:2.5rem; font-weight:400;
+}
+.hero-cta { display:flex; gap:0.75rem; justify-content:center; margin-bottom:4rem; }
+
+.hero-stats {
+  display:flex; gap:3rem; justify-content:center;
+  padding-top:2.5rem; border-top:1px solid var(--border);
+}
+.hstat-num {
+  font-family:'Epilogue',sans-serif; font-weight:900; font-size:2rem;
+  color:var(--gold); letter-spacing:-1px;
+}
+.hstat-label { font-size:0.78rem; color:var(--muted); margin-top:0.15rem; }
+
+.how-section { padding:5rem 2rem; max-width:1080px; margin:0 auto; }
+.how-label {
+  text-align:center; font-size:0.72rem; font-weight:700;
+  color:var(--muted2); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:1rem;
+}
+.how-title {
+  text-align:center; font-family:'Epilogue',sans-serif; font-weight:900;
+  font-size:clamp(1.8rem,3.5vw,2.5rem); letter-spacing:-1px; margin-bottom:3.5rem;
+}
+.how-title em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
+
+.how-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+.how-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:1.5rem;
+  position:relative; overflow:hidden;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.how-card:hover { border-color:var(--border2); transform:translateY(-3px); }
+.how-num {
+  font-family:'Instrument Serif',serif; font-style:italic;
+  font-size:3rem; font-weight:400; color:var(--surface3);
+  position:absolute; top:1rem; right:1.25rem; line-height:1;
+  user-select:none;
+}
+.how-icon { font-size:1.5rem; margin-bottom:0.75rem; }
+.how-card-title { font-size:0.92rem; font-weight:800; margin-bottom:0.4rem; letter-spacing:-0.2px; }
+.how-card-desc { font-size:0.78rem; color:var(--muted); line-height:1.6; }
+
+/* ═══ PROFILE ═══ */
+#profile .wrap { display:grid; grid-template-columns:290px 1fr; gap:1.5rem; align-items:start; }
+
+.profile-card { position:sticky; top:70px; }
+.pava-wrap { margin-bottom:1.25rem; position:relative; }
+.pava {
+  width:68px; height:68px; border-radius:15px;
+  background:linear-gradient(135deg,var(--gold),#c4622a);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.35rem; font-weight:900; color:#0c0c0e;
+}
+.open-badge {
+  position:absolute; bottom:-5px; left:50px;
+  background:var(--green); color:#0c0c0e;
+  font-size:0.6rem; font-weight:800; padding:0.15rem 0.45rem;
+  border-radius:10px; border:2px solid var(--bg); letter-spacing:0.03em;
+}
+.pname { font-size:1.15rem; font-weight:900; letter-spacing:-0.3px; margin-bottom:0.15rem; }
+.prole { font-size:0.8rem; color:var(--muted); margin-bottom:0.1rem; }
+.puni { font-size:0.75rem; color:var(--muted2); margin-bottom:0.85rem; }
+.pchips { display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:1.1rem; }
+.pdiv { height:1px; background:var(--border); margin:1rem 0; }
+.pstats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin-bottom:1.1rem; }
+.pstat { background:var(--surface2); border-radius:8px; padding:0.65rem 0.4rem; text-align:center; }
+.pstat-n { font-size:1.2rem; font-weight:900; color:var(--gold); font-family:'Epilogue',sans-serif; line-height:1; }
+.pstat-l { font-size:0.62rem; color:var(--muted2); margin-top:0.15rem; }
+
+.profile-r { display:flex; flex-direction:column; gap:1.25rem; }
+
+.skill-rows { display:flex; flex-direction:column; gap:0.65rem; }
+.skillr { display:flex; align-items:center; gap:0.75rem; }
+.skillr-name { font-size:0.8rem; font-weight:500; width:125px; flex-shrink:0; }
+.skillr-track { flex:1; height:4px; background:var(--surface3); border-radius:2px; overflow:hidden; }
+.skillr-fill { height:100%; border-radius:2px; transition:width 1s ease; }
+.skillr-lv { font-size:0.68rem; color:var(--muted2); width:68px; text-align:right; flex-shrink:0; }
+
+.proj-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
+.ptile {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:10px; padding:1rem; cursor:pointer;
+  transition:all 0.15s; position:relative; overflow:hidden;
+}
+.ptile:hover { border-color:var(--gold-mid); transform:translateY(-2px); background:var(--surface); }
+.ptile-bar { position:absolute; top:0; left:0; right:0; height:2px; }
+.ptile-name { font-size:0.85rem; font-weight:800; margin-bottom:0.25rem; letter-spacing:-0.2px; }
+.ptile-desc { font-size:0.73rem; color:var(--muted); line-height:1.45; margin-bottom:0.6rem; }
+.ptile-tags { display:flex; gap:0.3rem; flex-wrap:wrap; }
+
+/* ═══ IDEAS ═══ */
+#ideas .wrap { }
+.ideas-top {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding-bottom:1.75rem; margin-bottom:1.75rem;
+  border-bottom:1px solid var(--border);
+}
+.ideas-top-l h1 {
+  font-family:'Epilogue',sans-serif; font-weight:900;
+  font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-1px; line-height:1.05;
+}
+.ideas-top-l h1 em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
+.ideas-top-l p { color:var(--muted); font-size:0.85rem; margin-top:0.35rem; }
+
+.filters { display:flex; gap:0.35rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.fchip {
+  padding:0.28rem 0.85rem; border-radius:20px; font-size:0.76rem; font-weight:600;
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--muted); cursor:pointer; transition:all 0.15s;
+  font-family:'Epilogue',sans-serif;
+}
+.fchip:hover { color:var(--text); border-color:var(--border2); }
+.fchip.on { background:var(--text); color:var(--bg); border-color:var(--text); }
+
+.ideas-body { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; }
+
+.ilist { display:flex; flex-direction:column; gap:0.85rem; }
+.icard { cursor:default; }
+.icard-inner { display:flex; gap:1rem; }
+
+.ivote {
+  display:flex; flex-direction:column; align-items:center;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:9px; padding:0.55rem 0.65rem; gap:0.05rem;
+  cursor:pointer; transition:all 0.15s; flex-shrink:0; align-self:flex-start; min-width:48px;
+}
+.ivote:hover, .ivote.on { background:var(--gold-dim); border-color:var(--gold-mid); }
+.ivote.on .va, .ivote.on .vc { color:var(--gold); }
+.va { font-size:0.75rem; color:var(--muted2); transition:color 0.15s; }
+.vc { font-size:1rem; font-weight:900; color:var(--text); line-height:1; font-family:'Epilogue',sans-serif; }
+.vw { font-size:0.58rem; color:var(--muted2); font-weight:600; }
+
+.ibody { flex:1; }
+.ihead { display:flex; align-items:flex-start; justify-content:space-between; gap:0.75rem; margin-bottom:0.35rem; }
+.ititle { font-size:0.95rem; font-weight:800; letter-spacing:-0.2px; }
+.idesc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.7rem; }
+.itags { display:flex; gap:0.3rem; flex-wrap:wrap; margin-bottom:0.7rem; }
+.ifooter { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
+.imeta { display:flex; align-items:center; gap:0.45rem; font-size:0.72rem; color:var(--muted2); }
+.iava { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.5rem; font-weight:800; color:#0c0c0e; flex-shrink:0; }
+.iactions { display:flex; align-items:center; gap:0.5rem; }
+.intbtn {
+  display:flex; align-items:center; gap:0.3rem;
+  padding:0.28rem 0.7rem; border-radius:6px;
+  background:var(--surface2); border:1px solid var(--border2);
+  font-size:0.72rem; font-weight:700; cursor:pointer; color:var(--muted);
+  transition:all 0.15s; font-family:'Epilogue',sans-serif;
+}
+.intbtn:hover { background:var(--green-dim); border-color:rgba(62,207,142,0.3); color:var(--green); }
+.intbtn.on { background:var(--green-dim); border-color:rgba(62,207,142,0.3); color:var(--green); }
+.iavas { display:flex; }
+.iava2 { width:18px; height:18px; border-radius:50%; border:2px solid var(--surface); margin-left:-5px; display:flex; align-items:center; justify-content:center; font-size:0.45rem; font-weight:800; color:#0c0c0e; }
+.iava2:first-child { margin-left:0; }
+.icount { font-size:0.72rem; color:var(--green); font-weight:700; }
+
+/* idea sidebar */
+.isidebar .isticky { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
+.post-cta {
+  background:var(--gold); border-radius:12px; padding:1.4rem; cursor:pointer;
+  transition:all 0.2s;
+}
+.post-cta:hover { background:#e0b84e; transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,168,67,0.25); }
+.post-cta h3 { font-size:0.95rem; font-weight:900; color:#0c0c0e; margin-bottom:0.25rem; }
+.post-cta p { font-size:0.76rem; color:rgba(12,12,14,0.65); line-height:1.5; margin-bottom:0.85rem; }
+.post-cta-btn {
+  background:#0c0c0e; color:var(--gold); font-family:'Epilogue',sans-serif;
+  font-size:0.78rem; font-weight:800; padding:0.45rem 1rem;
+  border-radius:7px; border:none; cursor:pointer; width:100%; transition:all 0.15s;
+}
+.post-cta-btn:hover { background:#1a1a1f; }
+
+.forming-item { padding:0.6rem 0; border-bottom:1px solid var(--border); }
+.forming-item:last-child { border-bottom:none; }
+.forming-name { font-size:0.8rem; font-weight:700; margin-bottom:0.15rem; }
+.forming-sub { font-size:0.7rem; color:var(--muted2); }
+
+/* ═══ TEAM ═══ */
+#team .wrap { }
+.team-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:2rem; }
+.team-pname { font-size:1.7rem; font-weight:900; letter-spacing:-0.8px; margin-bottom:0.2rem; }
+.team-psub { font-size:0.82rem; color:var(--muted); }
+
+.mbrs { display:flex; gap:0.65rem; flex-wrap:wrap; margin-bottom:1.75rem; }
+.mbr {
+  display:flex; align-items:center; gap:0.6rem;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:0.7rem 0.9rem;
+  cursor:pointer; transition:all 0.15s; box-shadow:var(--shadow);
+}
+.mbr:hover { border-color:var(--gold-mid); transform:translateY(-1px); }
+.mava { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
+.mname { font-size:0.82rem; font-weight:700; }
+.mrole { font-size:0.7rem; color:var(--muted2); }
+.monline { width:7px; height:7px; border-radius:50%; margin-left:auto; flex-shrink:0; }
+
+.team-body { display:grid; grid-template-columns:1fr 280px; gap:1.5rem; }
+
+.update-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:1rem; margin-bottom:1.1rem;
+}
+.update-box-top { display:flex; gap:0.7rem; margin-bottom:0.75rem; }
+.uinput {
+  flex:1; background:var(--surface2); border:1px solid var(--border2);
+  border-radius:8px; padding:0.65rem 0.85rem; resize:none; min-height:72px;
+  font-family:'Epilogue',sans-serif; font-size:0.83rem; color:var(--text);
+  outline:none; transition:border-color 0.15s;
+}
+.uinput:focus { border-color:var(--gold-mid); }
+.uinput::placeholder { color:var(--muted2); }
+.ub-bottom { display:flex; justify-content:flex-end; }
+
+.ufeed { display:flex; flex-direction:column; }
+.uitem { display:flex; gap:0.8rem; padding:1rem 0; border-bottom:1px solid var(--border); }
+.uitem:last-child { border-bottom:none; }
+.uava-col { display:flex; flex-direction:column; align-items:center; }
+.uava { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
+.uline { flex:1; width:1px; background:var(--border); margin-top:4px; }
+.ubody { flex:1; }
+.uhead { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem; flex-wrap:wrap; }
+.uauthor { font-size:0.8rem; font-weight:800; }
+.utime { font-size:0.7rem; color:var(--muted2); }
+.utext { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.4rem; }
+.ufile {
+  display:inline-flex; align-items:center; gap:0.35rem;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:6px; padding:0.35rem 0.65rem; font-size:0.72rem; color:var(--muted);
+}
+.ureacts { display:flex; gap:0.3rem; margin-top:0.45rem; }
+.react {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:20px; padding:0.12rem 0.5rem;
+  font-size:0.73rem; cursor:pointer; transition:all 0.15s;
+}
+.react:hover { border-color:var(--gold-mid); background:var(--gold-dim); }
+
+.team-sidebar-sticky { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
+.origin-card {
+  background:var(--gold-dim); border:1px solid var(--gold-mid);
+  border-radius:12px; padding:1.1rem;
+}
+.origin-label { font-size:0.64rem; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.35rem; }
+.origin-title { font-size:0.88rem; font-weight:800; margin-bottom:0.2rem; }
+.origin-sub { font-size:0.73rem; color:var(--muted); }
+
+.progress-list { display:flex; flex-direction:column; gap:0.1rem; }
+.prog-item { font-size:0.78rem; padding:0.3rem 0; color:var(--muted); line-height:1.4; }
+.prog-item.done { color:var(--green); }
+.prog-item.active { color:var(--gold); font-weight:600; }
+
+/* ═══ INTERNSHIPS ═══ */
+#internships .wrap { }
+.intern-top {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding-bottom:1.75rem; margin-bottom:1.75rem;
+  border-bottom:1px solid var(--border);
+}
+.intern-top-l h1 {
+  font-family:'Epilogue',sans-serif; font-weight:900;
+  font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-1px; line-height:1.05;
+}
+.intern-top-l h1 em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
+.intern-top-l p { color:var(--muted); font-size:0.85rem; margin-top:0.35rem; }
+
+.intern-body { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; }
+
+.ilist2 { display:flex; flex-direction:column; gap:1rem; }
+.interncard {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:1.4rem; cursor:pointer;
+  transition:all 0.2s; box-shadow:var(--shadow);
+}
+.interncard:hover { border-color:var(--border2); transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+.interncard-top { display:flex; align-items:flex-start; gap:1rem; margin-bottom:0.9rem; }
+.company-logo {
+  width:44px; height:44px; border-radius:10px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  border:1px solid var(--border);
+}
+.company-name { font-size:0.88rem; font-weight:800; margin-bottom:0.1rem; }
+.company-type { font-size:0.72rem; color:var(--muted2); }
+.intern-title { font-size:1rem; font-weight:900; letter-spacing:-0.3px; margin-bottom:0.4rem; }
+.intern-desc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.85rem; }
+.intern-meta { display:flex; gap:1.25rem; margin-bottom:0.85rem; }
+.imeta2 { display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:var(--muted); }
+.intern-footer { display:flex; align-items:center; justify-content:space-between; }
+.intern-match {
+  display:flex; align-items:center; gap:0.4rem; font-size:0.75rem;
+}
+.match-bar { width:60px; height:4px; background:var(--surface3); border-radius:2px; overflow:hidden; }
+.match-fill { height:100%; background:var(--green); border-radius:2px; }
+.match-pct { font-size:0.72rem; color:var(--green); font-weight:700; }
+
+.intern-sidebar .isticky2 { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
+
+.why-card {
+  background:linear-gradient(135deg,rgba(212,168,67,0.06),rgba(62,207,142,0.04));
+  border:1px solid var(--gold-mid); border-radius:12px; padding:1.25rem;
+}
+.why-title { font-size:0.85rem; font-weight:800; margin-bottom:0.75rem; }
+.why-item { display:flex; gap:0.5rem; font-size:0.76rem; color:var(--muted); margin-bottom:0.5rem; line-height:1.5; }
+.why-icon { flex-shrink:0; color:var(--gold); }
+
+.company-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; }
+.co-item {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:8px; padding:0.65rem 0.75rem;
+  display:flex; align-items:center; gap:0.5rem;
+  font-size:0.75rem; font-weight:600;
+}
+.co-logo { font-size:1rem; }
+
+/* ═══ MODALS ═══ */
+.overlay {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; padding:1rem;
+}
+.overlay.open { display:flex; }
+.modal {
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:16px; padding:2rem; width:480px; max-width:100%;
+  box-shadow:0 32px 80px rgba(0,0,0,0.6);
+  animation: pageIn 0.2s ease;
+}
+.mhead { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; }
+.mtitle { font-size:1.05rem; font-weight:900; letter-spacing:-0.2px; }
+.mclose { background:none; border:none; color:var(--muted2); font-size:1.1rem; cursor:pointer; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+.mclose:hover { color:var(--text); background:var(--surface2); }
+.ff { margin-bottom:1rem; }
+.fl { display:block; font-size:0.7rem; font-weight:800; color:var(--muted2); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem; }
+.fi {
+  width:100%; background:var(--surface2); border:1px solid var(--border2);
+  border-radius:8px; padding:0.6rem 0.85rem;
+  font-family:'Epilogue',sans-serif; font-size:0.85rem; color:var(--text);
+  outline:none; transition:border-color 0.15s;
+}
+.fi:focus { border-color:var(--gold-mid); }
+.fi::placeholder { color:var(--muted2); }
+textarea.fi { resize:vertical; min-height:85px; }
+.mfooter { display:flex; gap:0.75rem; justify-content:flex-end; margin-top:1.25rem; }
+
+/* profile mini */
+.pm-top { display:flex; gap:1rem; margin-bottom:1.25rem; }
+.pm-ava { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
+.pm-name { font-size:1rem; font-weight:900; margin-bottom:0.1rem; }
+.pm-role { font-size:0.78rem; color:var(--muted); margin-bottom:0.5rem; }
+.pm-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin-bottom:1.1rem; }
+.pmstat { background:var(--surface2); border-radius:7px; padding:0.6rem; text-align:center; }
+.pmstat-n { font-size:1.1rem; font-weight:900; color:var(--gold); }
+.pmstat-l { font-size:0.62rem; color:var(--muted2); }
+
+/* toast */
+.toast {
+  position:fixed; bottom:1.5rem; right:1.5rem; z-index:600;
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:10px; padding:0.75rem 1.15rem;
+  font-size:0.82rem; font-weight:500;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  display:flex; align-items:center; gap:0.5rem;
+  animation: pageIn 0.2s ease;
+  max-width:320px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  #profile .wrap, .ideas-body, .team-body, .intern-body { grid-template-columns:1fr; }
+  .how-grid { grid-template-columns:repeat(2,1fr); }
+  .isidebar, .intern-sidebar { display:none; }
+  .proj-grid { grid-template-columns:1fr; }
+  .hero-stats { gap:1.5rem; }
+}
+@media (max-width:600px) {
+  .how-grid { grid-template-columns:1fr; }
+  .nav-center { display:none; }
+  .mbrs { flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">First<span class="brand-accent">work</span></div>
+  <div class="nav-center">
+    <button class="ntab" onclick="go('landing',this)">Home</button>
+    <button class="ntab" onclick="go('profile',this)">Profile</button>
+    <button class="ntab" onclick="go('ideas',this)">Ideas</button>
+    <button class="ntab" onclick="go('team',this)">My Team</button>
+    <button class="ntab" onclick="go('internships',this)">Internships</button>
+  </div>
+  <div class="nav-r">
+    <button class="btn btn-gold btn-sm" onclick="go('profile',document.querySelectorAll('.ntab')[1])">Get Started</button>
+    <div class="user-chip" onclick="go('profile',document.querySelectorAll('.ntab')[1])">
+      <div class="uava">JN</div>
+      <span>Jamie N.</span>
+    </div>
+  </div>
+</nav>
+
+<div class="app">
+
+<!-- ═══════ LANDING ═══════ -->
+<div id="landing" class="page active">
+  <div class="landing-hero">
+    <div class="hero-glow"></div>
+    <div class="hero-eyebrow">Built for international IT students · <span>Melbourne, Australia</span></div>
+    <h1 class="hero-h1">Real experience,<br>from <em>day one.</em></h1>
+    <p class="hero-sub">Firstwork connects international IT students with peers, real projects, and industry micro-internships — so you graduate with proof, not just a degree.</p>
+    <div class="hero-cta">
+      <button class="btn btn-gold" onclick="go('profile',document.querySelectorAll('.ntab')[1])">Create Your Profile →</button>
+      <button class="btn btn-ghost" onclick="go('ideas',document.querySelectorAll('.ntab')[2])">Browse Ideas</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-num">847</div>
+        <div class="hstat-label">Students</div>
+      </div>
+      <div>
+        <div class="hstat-num">124</div>
+        <div class="hstat-label">Projects Built</div>
+      </div>
+      <div>
+        <div class="hstat-num">38</div>
+        <div class="hstat-label">Industry Partners</div>
+      </div>
+      <div>
+        <div class="hstat-num">91%</div>
+        <div class="hstat-label">Found Roles</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <div class="how-label">How it works</div>
+    <h2 class="how-title">From zero to <em>employed</em> — in four steps</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">1</div>
+        <div class="how-icon">👤</div>
+        <div class="how-card-title">Build Your Profile</div>
+        <div class="how-card-desc">Document your skills, projects, and roles honestly. Your profile grows as you do — from year one, not after graduation.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">2</div>
+        <div class="how-icon">💡</div>
+        <div class="how-card-title">Post or Join an Idea</div>
+        <div class="how-card-desc">Post a real problem. Others show interest, you view their profiles, and a team forms naturally — no applications, no rejections.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">3</div>
+        <div class="how-icon">🤝</div>
+        <div class="how-card-title">Work as a Team</div>
+        <div class="how-card-desc">Build together in a shared team space. Share updates, document contributions, and ship something real.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">4</div>
+        <div class="how-icon">🏢</div>
+        <div class="how-card-title">Land a Micro-Internship</div>
+        <div class="how-card-desc">Companies post structured short-term projects. They discover you through your Firstwork profile — proof beats a resume every time.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PROFILE ═══════ -->
+<div id="profile" class="page">
+  <div class="wrap">
+    <div>
+      <div class="card profile-card">
+        <div class="pava-wrap">
+          <div class="pava">JN</div>
+          <div class="open-badge">OPEN TO TEAMS</div>
+        </div>
+        <div class="pname">Jamie Nguyen</div>
+        <div class="prole">Backend & Data Engineering</div>
+        <div class="puni">RMIT · Bachelor of IT · Melbourne 🇦🇺</div>
+        <div class="pchips">
+          <span class="tag tgreen">Open to Teams</span>
+          <span class="tag tg">Year 2 · 2025</span>
+          <span class="tag tg">English</span>
+        </div>
+        <div class="pdiv"></div>
+        <div class="pstats">
+          <div class="pstat"><div class="pstat-n">3</div><div class="pstat-l">Projects</div></div>
+          <div class="pstat"><div class="pstat-n">4</div><div class="pstat-l">Teammates</div></div>
+          <div class="pstat"><div class="pstat-n">112</div><div class="pstat-l">Idea Votes</div></div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center">✏️ Edit Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-r">
+      <div class="card">
+        <div class="sh">Skills</div>
+        <div class="skill-rows">
+          <div class="skillr"><span class="skillr-name">Python</span><div class="skillr-track"><div class="skillr-fill" style="width:85%;background:var(--gold)"></div></div><span class="skillr-lv">Advanced</span></div>
+          <div class="skillr"><span class="skillr-name">Azure / ADF</span><div class="skillr-track"><div class="skillr-fill" style="width:65%;background:var(--green)"></div></div><span class="skillr-lv">Intermediate</span></div>
+          <div class="skillr"><span class="skillr-name">FastAPI</span><div class="skillr-track"><div class="skillr-fill" style="width:60%;background:var(--gold)"></div></div><span class="skillr-lv">Intermediate</span></div>
+          <div class="skillr"><span class="skillr-name">PySpark</span><div class="skillr-track"><div class="skillr-fill" style="width:40%;background:var(--blue)"></div></div><span class="skillr-lv">Familiar</span></div>
+          <div class="skillr"><span class="skillr-name">dbt</span><div class="skillr-track"><div class="skillr-fill" style="width:30%;background:var(--red)"></div></div><span class="skillr-lv">Learning</span></div>
+        </div>
+        <div style="margin-top:1rem;padding-top:0.85rem;border-top:1px solid var(--border);display:flex;gap:0.35rem;flex-wrap:wrap">
+          <span class="tag tg">React</span><span class="tag tg">PostgreSQL</span><span class="tag tg">Docker</span><span class="tag tg">Git</span><span class="tag tg">Java</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem">
+          <div class="sh" style="margin-bottom:0">Projects Built</div>
+          <button class="btn btn-ghost btn-sm">+ Add Project</button>
+        </div>
+        <div class="proj-grid">
+          <div class="ptile" onclick="toast('📂 GazeSpeak — opening project details')">
+            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--green),var(--blue))"></div>
+            <div class="ptile-name">GazeSpeak AAC Tool</div>
+            <div class="ptile-desc">Webcam-only head-tracking communication app for people with limited mobility. Built for a real user.</div>
+            <div class="ptile-tags"><span class="tag tgreen">Shipped</span><span class="tag tg">MediaPipe</span><span class="tag tg">JS</span></div>
+          </div>
+          <div class="ptile" onclick="toast('📂 CCTV System — opening project details')">
+            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--gold),#c4622a)"></div>
+            <div class="ptile-name">CCTV Narrative System</div>
+            <div class="ptile-desc">Gemini 2.0 Flash powered video analysis that generates natural language incident reports.</div>
+            <div class="ptile-tags"><span class="tag tgold">In Progress</span><span class="tag tg">React</span><span class="tag tg">Gemini</span></div>
+          </div>
+          <div class="ptile" onclick="toast('📂 RentWatch — opening project details')">
+            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--gold),var(--green))"></div>
+            <div class="ptile-name">RentWatch Melbourne</div>
+            <div class="ptile-desc">Real-time rental data pipeline with suburb affordability dashboard. Team of 4.</div>
+            <div class="ptile-tags"><span class="tag tgold">Active</span><span class="tag tg">FastAPI</span><span class="tag tg">Python</span></div>
+          </div>
+          <div class="ptile" style="border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:110px" onclick="toast('➕ Add a new project to your profile')">
+            <div style="text-align:center"><div style="font-size:1.4rem;margin-bottom:0.3rem">＋</div><div style="font-size:0.75rem;font-weight:700;color:var(--muted2)">Add project</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Certifications in Progress</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
+            <span>⏳ Microsoft PL-300</span><span class="tag tgold">In Progress</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
+            <span>⏳ Databricks DE Associate</span><span class="tag tgold">In Progress</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
+            <span>📅 Databricks GenAI Engineer</span><span class="tag tg">Planned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ IDEAS ═══════ -->
+<div id="ideas" class="page">
+  <div class="wrap">
+    <div class="ideas-top">
+      <div class="ideas-top-l">
+        <h1>Build something<br><em>worth building.</em></h1>
+        <p>Post a problem. Find people who care. Build it together.</p>
+      </div>
+      <button class="btn btn-gold" onclick="openM('mPostIdea')">+ Post an Idea</button>
+    </div>
+
+    <div class="filters">
+      <button class="fchip on">All Ideas</button>
+      <button class="fchip">🔥 Most Voted</button>
+      <button class="fchip">🆕 Newest</button>
+      <button class="fchip">🏗 Team Forming</button>
+      <button class="fchip">🚀 Shipped</button>
+    </div>
+
+    <div class="ideas-body">
+      <div class="ilist">
+
+        <div class="card icard">
+          <div class="icard-inner">
+            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">94</span><span class="vw">votes</span></div>
+            <div class="ibody">
+              <div class="ihead"><div class="ititle">Visa Condition & Deadline Tracker</div><span class="tag tgreen">🏗 Forming</span></div>
+              <div class="idesc">International students miss visa conditions or deadlines because reminders are buried in legal documents. A smart plain-English reminder app that actually makes sense.</div>
+              <div class="itags"><span class="tag tg">Mobile</span><span class="tag tg">Notifications</span><span class="tag tg">Gov API</span></div>
+              <div class="ifooter">
+                <div class="imeta"><div class="iava" style="background:var(--gold)">TH</div><span>Tom H. · RMIT · 2 days ago</span></div>
+                <div class="iactions">
+                  <div style="display:flex;align-items:center;gap:0.35rem">
+                    <div class="iavas"><div class="iava2" style="background:var(--green)">CP</div><div class="iava2" style="background:var(--blue)">LW</div><div class="iava2" style="background:var(--red)">PR</div></div>
+                    <span class="icount">3 interested</span>
+                  </div>
+                  <button class="intbtn" onclick="showInt(this,'Visa Tracker')">👋 I'm Interested</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card icard">
+          <div class="icard-inner">
+            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">71</span><span class="vw">votes</span></div>
+            <div class="ibody">
+              <div class="ihead"><div class="ititle">AI Resume Gap Analyser — Melbourne IT Jobs</div><span class="tag tgold">Open</span></div>
+              <div class="idesc">Upload a job description, get a skills gap analysis vs what Melbourne companies actually want — with a personalised learning roadmap to close the gap.</div>
+              <div class="itags"><span class="tag tg">AI/NLP</span><span class="tag tg">Career</span><span class="tag tg">Melbourne</span></div>
+              <div class="ifooter">
+                <div class="imeta"><div class="iava" style="background:var(--blue)">JN</div><span>Jamie N. · RMIT · 5 days ago</span></div>
+                <div class="iactions">
+                  <div style="display:flex;align-items:center;gap:0.35rem">
+                    <div class="iavas"><div class="iava2" style="background:var(--green)">MK</div></div>
+                    <span class="icount">1 interested</span>
+                  </div>
+                  <button class="intbtn" onclick="showInt(this,'Resume Analyser')">👋 I'm Interested</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card icard">
+          <div class="icard-inner">
+            <div class="ivote on" onclick="toggleVote(this)"><span class="va" style="color:var(--gold)">▲</span><span class="vc" style="color:var(--gold)">58</span><span class="vw">votes</span></div>
+            <div class="ibody">
+              <div class="ihead"><div class="ititle">Study Group Matcher by Subject & Schedule</div><span class="tag tg">Open</span></div>
+              <div class="idesc">Students can't easily find others in the same subject with compatible schedules. A matching tool — enter subjects and free slots, get matched with nearby study partners.</div>
+              <div class="itags"><span class="tag tg">Matching</span><span class="tag tg">Scheduling</span><span class="tag tg">Social</span></div>
+              <div class="ifooter">
+                <div class="imeta"><div class="iava" style="background:#c4622a">CT</div><span>Chloe T. · UniMelb · 1 week ago</span></div>
+                <div class="iactions">
+                  <button class="intbtn on">✓ Interested</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card icard">
+          <div class="icard-inner">
+            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">112</span><span class="vw">votes</span></div>
+            <div class="ibody">
+              <div class="ihead"><div class="ititle">Browser-Based AAC Communication Tool</div><span class="tag tblue">🚀 Shipped</span></div>
+              <div class="idesc">Webcam-only head-tracking app for people with limited mobility to communicate. No hardware, no install. Built for a real user, now open sourced for the community.</div>
+              <div class="itags"><span class="tag tg">Accessibility</span><span class="tag tg">MediaPipe</span><span class="tag tg">JS</span></div>
+              <div class="ifooter">
+                <div class="imeta"><div class="iava" style="background:var(--gold)">JN</div><span>Jamie N. · RMIT · 3 weeks ago</span></div>
+                <div class="iactions"><span style="font-size:0.72rem;color:var(--blue)">★ Viewed by 2 industry partners</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="isidebar">
+        <div class="isticky">
+          <div class="post-cta" onclick="openM('mPostIdea')">
+            <h3>Have a problem worth solving?</h3>
+            <p>Post it here. If others connect with it, a team forms naturally — no applications, no rejections.</p>
+            <button class="post-cta-btn">Post Your Idea →</button>
+          </div>
+          <div class="card">
+            <div class="sh">Teams Forming Now</div>
+            <div class="forming-item"><div class="forming-name">Visa Condition Tracker</div><div class="forming-sub">3 interested · needs Frontend dev</div></div>
+            <div class="forming-item"><div class="forming-name">Campus Food Waste Logger</div><div class="forming-sub">2 interested · needs Backend</div></div>
+            <div class="forming-item"><div class="forming-name">Student Budget Companion</div><div class="forming-sub">4 interested · team full</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEAM ═══════ -->
+<div id="team" class="page">
+  <div class="wrap">
+    <div class="team-top">
+      <div>
+        <div class="team-pname">RentWatch Melbourne</div>
+        <div class="team-psub">Team of 4 · Started from a Firstwork idea · Week 3</div>
+      </div>
+      <button class="btn btn-gold" onclick="openM('mUpdate')">+ Share Update</button>
+    </div>
+
+    <div class="mbrs">
+      <div class="mbr" onclick="openProf('Jamie Nguyen','Backend Dev','Python, FastAPI, Azure','JN','linear-gradient(135deg,var(--gold),#c4622a)')">
+        <div class="mava" style="background:linear-gradient(135deg,var(--gold),#c4622a)">JN</div>
+        <div><div class="mname">Jamie Nguyen</div><div class="mrole">Backend Dev</div></div>
+        <div class="monline" style="background:var(--green)"></div>
+      </div>
+      <div class="mbr" onclick="openProf('Chloe Pham','Data Engineer','dbt, Snowflake, SQL','CP','linear-gradient(135deg,#818cf8,#f472b6)')">
+        <div class="mava" style="background:linear-gradient(135deg,#818cf8,#f472b6)">CP</div>
+        <div><div class="mname">Chloe Pham</div><div class="mrole">Data Engineer</div></div>
+        <div class="monline" style="background:var(--green)"></div>
+      </div>
+      <div class="mbr" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LM','linear-gradient(135deg,#fbbf24,#f97316)')">
+        <div class="mava" style="background:linear-gradient(135deg,#fbbf24,#f97316)">LW</div>
+        <div><div class="mname">Lachlan Webb</div><div class="mrole">Frontend Dev</div></div>
+        <div class="monline" style="background:var(--muted2)"></div>
+      </div>
+      <div class="mbr" onclick="openProf('Priya Rao','Product Manager','Figma, Research, Notion','PR','linear-gradient(135deg,#f472b6,#a855f7)')">
+        <div class="mava" style="background:linear-gradient(135deg,#f472b6,#a855f7)">PR</div>
+        <div><div class="mname">Priya Rao</div><div class="mrole">Product Manager</div></div>
+        <div class="monline" style="background:var(--green)"></div>
+      </div>
+    </div>
+
+    <div class="team-body">
+      <div>
+        <div class="update-box">
+          <div class="update-box-top">
+            <div class="uava" style="background:linear-gradient(135deg,var(--gold),#c4622a);border-radius:50%;flex-shrink:0">JN</div>
+            <textarea class="uinput" placeholder="Share what you worked on, a blocker, or a win…" id="uinput"></textarea>
+          </div>
+          <div class="ub-bottom"><button class="btn btn-light btn-sm" onclick="doUpdate()">Share with team →</button></div>
+        </div>
+
+        <div class="ufeed">
+          <div class="uitem">
+            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,var(--gold),#c4622a)">JN</div><div class="uline"></div></div>
+            <div class="ubody">
+              <div class="uhead"><span class="uauthor">Jamie Nguyen</span><span class="tag tg" style="font-size:0.62rem">Backend</span><span class="utime">2h ago</span></div>
+              <div class="utext">FastAPI endpoints for rental data are done and tested. Connected to Mia's PostgreSQL schema. Ready for Lachlan to hook up the map component.</div>
+              <div class="ufile">📎 api_endpoints.md</div>
+              <div class="ureacts"><div class="react">🔥 3</div><div class="react">✅ 2</div></div>
+            </div>
+          </div>
+          <div class="uitem">
+            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,#818cf8,#f472b6)">CP</div><div class="uline"></div></div>
+            <div class="ubody">
+              <div class="uhead"><span class="uauthor">Chloe Pham</span><span class="tag tg" style="font-size:0.62rem">Data Eng</span><span class="utime">Yesterday</span></div>
+              <div class="utext">Finished historical price trend analysis across 50 Melbourne suburbs. Interesting patterns around St Kilda and Footscray — presenting Friday standup.</div>
+              <div class="ureacts"><div class="react">🚀 4</div><div class="react">👏 2</div></div>
+            </div>
+          </div>
+          <div class="uitem">
+            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,#f472b6,#a855f7)">PR</div></div>
+            <div class="ubody">
+              <div class="uhead"><span class="uauthor">Priya Rao</span><span class="tag tg" style="font-size:0.62rem">PM</span><span class="utime">2 days ago</span></div>
+              <div class="utext">Interviewed 5 students. Key insight: they don't care about absolute rent prices — they want rent as a % of Austudy/minimum wage. Updating Lachlan's brief now.</div>
+              <div class="ufile">📎 user_research_notes.pdf</div>
+              <div class="ureacts"><div class="react">💡 5</div><div class="react">❤️ 3</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="team-sidebar-sticky">
+          <div class="origin-card">
+            <div class="origin-label">💡 Started from a Firstwork idea</div>
+            <div class="origin-title">Melbourne Rent Affordability for Students</div>
+            <div class="origin-sub">94 votes · Team formed in 3 days · Week 3 of 6</div>
+          </div>
+          <div class="card">
+            <div class="sh">Progress</div>
+            <div class="progress-list">
+              <div class="prog-item done">✅ Project setup & repo</div>
+              <div class="prog-item done">✅ Database schema designed</div>
+              <div class="prog-item done">✅ API endpoints built</div>
+              <div class="prog-item active">🔄 Frontend map (in progress)</div>
+              <div class="prog-item">⬜ Deploy to production</div>
+              <div class="prog-item">⬜ Showcase on Firstwork</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ INTERNSHIPS ═══════ -->
+<div id="internships" class="page">
+  <div class="wrap">
+    <div class="intern-top">
+      <div class="intern-top-l">
+        <h1>Your work<br>opens <em>real doors.</em></h1>
+        <p>Companies post structured micro-internships. They discover you through your Firstwork profile — proof beats a resume every time.</p>
+      </div>
+      <span class="tag tgreen" style="font-size:0.75rem;padding:0.4rem 0.8rem">38 Partners Active</span>
+    </div>
+
+    <div class="filters" style="margin-bottom:1.5rem">
+      <button class="fchip on">All</button>
+      <button class="fchip">Data & Analytics</button>
+      <button class="fchip">Software Dev</button>
+      <button class="fchip">AI / ML</button>
+      <button class="fchip">Product & Design</button>
+      <button class="fchip">🔥 High Match</button>
+    </div>
+
+    <div class="intern-body">
+      <div class="ilist2">
+
+        <div class="interncard" onclick="toast('📋 Opening application for Deloitte Digital...')">
+          <div class="interncard-top">
+            <div class="company-logo" style="background:rgba(79,142,247,0.08)">🔷</div>
+            <div>
+              <div class="company-name">Deloitte Digital</div>
+              <div class="company-type">Consulting · Melbourne CBD</div>
+            </div>
+            <span class="tag tgreen" style="margin-left:auto">93% Match</span>
+          </div>
+          <div class="intern-title">Data Engineering Micro-Internship</div>
+          <div class="intern-desc">Work with our data team on a real client pipeline project over 4 weeks. You'll build ingestion jobs, write transformations in dbt, and present findings to the project lead. Structured mentorship included.</div>
+          <div class="intern-meta">
+            <div class="imeta2">📅 4 weeks</div>
+            <div class="imeta2">💰 $800 stipend</div>
+            <div class="imeta2">🏢 Hybrid</div>
+            <div class="imeta2">📍 Melbourne</div>
+          </div>
+          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
+            <span class="tag tg">Python</span><span class="tag tg">dbt</span><span class="tag tg">SQL</span><span class="tag tg">Azure</span>
+          </div>
+          <div class="intern-footer">
+            <div class="intern-match">
+              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
+              <div class="match-bar"><div class="match-fill" style="width:93%"></div></div>
+              <span class="match-pct">93%</span>
+            </div>
+            <button class="btn btn-gold btn-sm">Apply Now →</button>
+          </div>
+        </div>
+
+        <div class="interncard" onclick="toast('📋 Opening application for ANZ Bank Tech...')">
+          <div class="interncard-top">
+            <div class="company-logo" style="background:rgba(62,207,142,0.08)">🏦</div>
+            <div>
+              <div class="company-name">ANZ Bank Tech</div>
+              <div class="company-type">FinTech · Docklands</div>
+            </div>
+            <span class="tag tgold" style="margin-left:auto">78% Match</span>
+          </div>
+          <div class="intern-title">Backend API Development Project</div>
+          <div class="intern-desc">Join a squad working on internal banking APIs. Build, test, and document RESTful services in a real Agile environment. You'll attend standups, sprint planning, and retros alongside the full team.</div>
+          <div class="intern-meta">
+            <div class="imeta2">📅 6 weeks</div>
+            <div class="imeta2">💰 $1,200 stipend</div>
+            <div class="imeta2">🏢 On-site</div>
+            <div class="imeta2">📍 Docklands</div>
+          </div>
+          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
+            <span class="tag tg">FastAPI</span><span class="tag tg">Python</span><span class="tag tg">PostgreSQL</span><span class="tag tg">Docker</span>
+          </div>
+          <div class="intern-footer">
+            <div class="intern-match">
+              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
+              <div class="match-bar"><div class="match-fill" style="width:78%"></div></div>
+              <span class="match-pct">78%</span>
+            </div>
+            <button class="btn btn-gold btn-sm">Apply Now →</button>
+          </div>
+        </div>
+
+        <div class="interncard" onclick="toast('📋 Opening application for REA Group...')">
+          <div class="interncard-top">
+            <div class="company-logo" style="background:rgba(212,168,67,0.08)">🏠</div>
+            <div>
+              <div class="company-name">REA Group</div>
+              <div class="company-type">PropTech · Richmond</div>
+            </div>
+            <span class="tag tgold" style="margin-left:auto">85% Match</span>
+          </div>
+          <div class="intern-title">Data & Insights Analyst Project</div>
+          <div class="intern-desc">Analyse real property market data to surface actionable insights for the product team. Perfect for students with data engineering experience — your RentWatch-style work is directly relevant here.</div>
+          <div class="intern-meta">
+            <div class="imeta2">📅 4 weeks</div>
+            <div class="imeta2">💰 $900 stipend</div>
+            <div class="imeta2">🏢 Hybrid</div>
+            <div class="imeta2">📍 Richmond</div>
+          </div>
+          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
+            <span class="tag tg">Python</span><span class="tag tg">SQL</span><span class="tag tg">Tableau / PBI</span>
+          </div>
+          <div class="intern-footer">
+            <div class="intern-match">
+              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
+              <div class="match-bar"><div class="match-fill" style="width:85%"></div></div>
+              <span class="match-pct">85%</span>
+            </div>
+            <button class="btn btn-gold btn-sm">Apply Now →</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="intern-sidebar">
+        <div class="isticky2">
+          <div class="why-card">
+            <div class="why-title">Why companies choose Firstwork</div>
+            <div class="why-item"><span class="why-icon">✦</span><span>Students come with proven project work, not just a CV</span></div>
+            <div class="why-item"><span class="why-icon">✦</span><span>Profile match scores based on real skills — not self-reported claims</span></div>
+            <div class="why-item"><span class="why-icon">✦</span><span>Structured 4–6 week projects with clear deliverables</span></div>
+            <div class="why-item"><span class="why-icon">✦</span><span>Pipeline to full-time hiring from a diverse talent pool</span></div>
+          </div>
+
+          <div class="card">
+            <div class="sh">Industry Partners</div>
+            <div class="company-grid">
+              <div class="co-item"><span class="co-logo">🔷</span>Deloitte Digital</div>
+              <div class="co-item"><span class="co-logo">🏦</span>ANZ Tech</div>
+              <div class="co-item"><span class="co-logo">⚡</span>Atlassian</div>
+              <div class="co-item"><span class="co-logo">🏠</span>REA Group</div>
+              <div class="co-item"><span class="co-logo">🏥</span>Medibank</div>
+              <div class="co-item"><span class="co-logo">🛒</span>Coles Digital</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end app -->
+
+<!-- MODALS -->
+<div class="overlay" id="mPostIdea">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle">💡 Post an Idea</div><button class="mclose" onclick="closeM('mPostIdea')">✕</button></div>
+    <div class="ff"><label class="fl">What's the problem?</label><input class="fi" type="text" placeholder="e.g. Students miss visa deadlines because reminders are confusing"></div>
+    <div class="ff"><label class="fl">Describe it</label><textarea class="fi" placeholder="Who faces it? Why does it matter? What would a solution look like?"></textarea></div>
+    <div class="ff"><label class="fl">Category</label><select class="fi"><option>Social Impact</option><option>EdTech</option><option>FinTech</option><option>Sustainability</option><option>Accessibility</option><option>Developer Tools</option><option>Other</option></select></div>
+    <div class="ff"><label class="fl">Skills you'd need (optional)</label><input class="fi" type="text" placeholder="e.g. Frontend dev, someone who knows APIs"></div>
+    <div class="mfooter">
+      <button class="btn btn-ghost" onclick="closeM('mPostIdea')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeM('mPostIdea');toast('💡 Idea posted! Others can now vote and show interest.')">Post to Board →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="mUpdate">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle">📣 Share a Team Update</div><button class="mclose" onclick="closeM('mUpdate')">✕</button></div>
+    <div class="ff"><label class="fl">What did you work on?</label><textarea class="fi" placeholder="A progress update, a blocker, a win, a question for the team…" style="min-height:110px"></textarea></div>
+    <div class="ff"><label class="fl">Attach a link or file (optional)</label><input class="fi" type="text" placeholder="Paste a link or filename"></div>
+    <div class="mfooter">
+      <button class="btn btn-ghost" onclick="closeM('mUpdate')">Cancel</button>
+      <button class="btn btn-gold" onclick="closeM('mUpdate');toast('✅ Update shared with your team')">Share →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="mInterested">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle" id="mIntTitle">People interested</div><button class="mclose" onclick="closeM('mInterested')">✕</button></div>
+    <p style="font-size:0.77rem;color:var(--muted2);margin-bottom:1rem">Click a profile to learn more. Reach out if you think you'd work well together.</p>
+    <div>
+      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Chloe Pham','Data Engineer','dbt, Snowflake, SQL','AT','linear-gradient(135deg,#818cf8,#f472b6)')">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#818cf8,#f472b6);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">CP</div>
+        <div><div style="font-size:0.83rem;font-weight:700">Chloe Pham</div><div style="font-size:0.72rem;color:var(--muted2)">Data Engineer · RMIT · dbt, Snowflake</div></div>
+        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LM','linear-gradient(135deg,#fbbf24,#f97316)')">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#fbbf24,#f97316);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">LW</div>
+        <div><div style="font-size:0.83rem;font-weight:700">Lachlan Webb</div><div style="font-size:0.72rem;color:var(--muted2)">Frontend Dev · Monash · React, TypeScript</div></div>
+        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;cursor:pointer" onclick="openProf('Priya Rao','Product Manager','Figma, Research, Notion','PR','linear-gradient(135deg,#f472b6,#a855f7)')">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#f472b6,#a855f7);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">PR</div>
+        <div><div style="font-size:0.83rem;font-weight:700">Priya Rao</div><div style="font-size:0.72rem;color:var(--muted2)">PM · UniMelb · Research, Figma</div></div>
+        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="mProfile">
+  <div class="modal" style="max-width:400px">
+    <div class="mhead"><div class="mtitle">Profile</div><button class="mclose" onclick="closeM('mProfile')">✕</button></div>
+    <div class="pm-top">
+      <div class="pm-ava" id="pmAva"></div>
+      <div><div class="pm-name" id="pmName"></div><div class="pm-role" id="pmRole"></div><div id="pmTags" style="display:flex;gap:0.3rem;flex-wrap:wrap"></div></div>
+    </div>
+    <div class="pm-stats">
+      <div class="pmstat"><div class="pmstat-n">3</div><div class="pmstat-l">Projects</div></div>
+      <div class="pmstat"><div class="pmstat-n">6</div><div class="pmstat-l">Teammates</div></div>
+      <div class="pmstat"><div class="pmstat-n">78</div><div class="pmstat-l">Idea Votes</div></div>
+    </div>
+    <p style="font-size:0.74rem;color:var(--muted2);text-align:center;margin-bottom:1rem">Built 3 real projects · Played multiple roles</p>
+    <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="closeM('mProfile');toast('👋 Connection request sent!')">Connect & Build Together</button>
+  </div>
+</div>
+
+<script>
+const pages = document.querySelectorAll('.page');
+const tabs = document.querySelectorAll('.ntab');
+
+function go(id, btn) {
+  pages.forEach(p => p.classList.remove('active'));
+  tabs.forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Set landing tab active on load
+document.querySelectorAll('.ntab')[0].classList.add('active');
+
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+
+function toggleVote(el) {
+  el.classList.toggle('on');
+  const vc = el.querySelector('.vc');
+  const n = parseInt(vc.textContent);
+  const on = el.classList.contains('on');
+  vc.textContent = on ? n+1 : n-1;
+  el.querySelector('.va').style.color = on ? 'var(--gold)' : '';
+  vc.style.color = on ? 'var(--gold)' : '';
+}
+
+function showInt(btn, name) {
+  btn.classList.toggle('on');
+  btn.textContent = btn.classList.contains('on') ? '✓ Interested' : '👋 I\'m Interested';
+  document.getElementById('mIntTitle').textContent = 'People interested in: ' + name;
+  setTimeout(() => openM('mInterested'), 250);
+}
+
+function openProf(name, role, skills, initials, grad) {
+  document.getElementById('pmName').textContent = name;
+  document.getElementById('pmRole').textContent = role;
+  const ava = document.getElementById('pmAva');
+  ava.textContent = initials; ava.style.background = grad;
+  const tags = document.getElementById('pmTags');
+  tags.innerHTML = skills.split(', ').map(s=>`<span class="tag tg">${s}</span>`).join('');
+  closeM('mInterested');
+  openM('mProfile');
+}
+
+function doUpdate() {
+  const inp = document.getElementById('uinput');
+  if (inp.value.trim()) { inp.value=''; toast('✅ Update shared with your team'); }
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity 0.3s'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 2800);
+}
+
+document.querySelectorAll('.filters').forEach(f => {
+  f.querySelectorAll('.fchip').forEach(c => c.addEventListener('click', function(){
+    f.querySelectorAll('.fchip').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+  }));
+});
+
+document.querySelectorAll('.react').forEach(r => r.addEventListener('click', function(){
+  const parts = this.textContent.trim().split(' ');
+  this.textContent = parts[0]+' '+(parseInt(parts[1])+1);
+}));
+</script>
+</body>
+</html>
