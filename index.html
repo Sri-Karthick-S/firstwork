@@ -4,1216 +4,1063 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Firstwork — Real Experience From Day One</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Epilogue:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600;1,900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0c0e;
-  --surface: #131316;
-  --surface2: #1a1a1f;
-  --surface3: #202028;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f2f1ee;
-  --muted: #888885;
-  --muted2: #555552;
-  --gold: #d4a843;
-  --gold-dim: rgba(212,168,67,0.12);
-  --gold-mid: rgba(212,168,67,0.3);
-  --green: #3ecf8e;
-  --green-dim: rgba(62,207,142,0.1);
-  --blue: #4f8ef7;
-  --blue-dim: rgba(79,142,247,0.1);
-  --red: #e05252;
-  --red-dim: rgba(224,82,82,0.1);
-  --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --bg:#f8f7f4; --white:#ffffff; --ink:#1a1917; --ink2:#68645f; --ink3:#b0aca7;
+  --border:#e8e4de; --border2:#ccc8c2;
+  --accent:#2155e8; --al:#eef2ff; --am:#c7d2fe;
+  --green:#16a34a; --gl:#f0fdf4;
+  --amber:#d97706; --aml:#fffbeb;
+  --rose:#e11d48; --rl:#fff1f2;
+  --sw:228px;
+  --ss:0 1px 3px rgba(26,25,23,.05),0 1px 2px rgba(26,25,23,.04);
+  --sm:0 4px 16px rgba(26,25,23,.07),0 1px 4px rgba(26,25,23,.04);
+  --sl:0 16px 48px rgba(26,25,23,.1),0 4px 16px rgba(26,25,23,.06);
+  --r:13px;
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh}
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+/* ─── AUTH WRAPPER ─── */
+#authWrap{display:block}
+#appWrap{display:none}
+body.in #authWrap{display:none}
+body.in #appWrap{display:flex;min-height:100vh}
 
-html { scroll-behavior: smooth; }
+/* ─── AUTH SCREENS ─── */
+.ascreen{display:none}
+.ascreen.on{display:block}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Epilogue', sans-serif;
-  font-size: 15px;
-  line-height: 1.65;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* auth nav */
+.anav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.abrand{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;color:var(--ink)}
+.abrand em{color:var(--accent);font-style:italic}
 
-/* ── NOISE TEXTURE ── */
-body::before {
-  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: 0.4;
-}
+/* auth card */
+.acwrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:2rem}
+.acard{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:2.25rem;width:420px;max-width:100%;box-shadow:var(--sl)}
+.acard-brand{font-family:'Fraunces',serif;font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:1.5rem}
+.acard-brand em{color:var(--accent);font-style:italic}
+.acard-title{font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;letter-spacing:-.4px;margin-bottom:.2rem}
+.acard-sub{font-size:.84rem;color:var(--ink2);margin-bottom:1.5rem}
+.afield{margin-bottom:.95rem}
+.alabel{display:block;font-size:.7rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.38rem}
+.ainput{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:.62rem .88rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:border-color .15s}
+.ainput:focus{border-color:var(--am);background:var(--white)}
+.ainput::placeholder{color:var(--ink3)}
+.ahint{font-size:.7rem;color:var(--ink3);margin-top:.28rem}
+.aterms{font-size:.73rem;color:var(--ink3);margin-bottom:.9rem;line-height:1.55}
+.alink{color:var(--accent);cursor:pointer;font-weight:600}
+.alink:hover{text-decoration:underline}
+.aswitch{text-align:center;font-size:.8rem;color:var(--ink2);margin-top:1rem}
+.adiv{text-align:center;font-size:.73rem;color:var(--ink3);margin:1rem 0;position:relative}
+.adiv::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+.adiv span{background:var(--white);padding:0 .75rem;position:relative}
+.aerr{background:var(--rl);border:1px solid #fecdd3;border-radius:8px;padding:.6rem .88rem;font-size:.78rem;color:var(--rose);margin-bottom:.9rem;display:none}
+.aerr.on{display:block}
 
-/* ── NAV ── */
-nav {
-  position: fixed; top:0; left:0; right:0; z-index:200;
-  height:56px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 1.75rem;
-  background: rgba(12,12,14,0.88);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.brand {
-  font-family:'Epilogue',sans-serif; font-weight:900; font-size:1.15rem;
-  letter-spacing:-0.5px; color:var(--text);
-  display:flex; align-items:center; gap:0.4rem;
-}
-.brand-accent { color:var(--gold); font-family:'Instrument Serif',serif; font-style:italic; }
-.nav-center { display:flex; gap:0.1rem; }
-.ntab {
-  padding:0.35rem 1rem; border-radius:6px; font-size:0.82rem; font-weight:600;
-  background:none; border:none; color:var(--muted); cursor:pointer;
-  transition:all 0.15s; font-family:'Epilogue',sans-serif; letter-spacing:0.01em;
-}
-.ntab:hover { color:var(--text); background:var(--surface2); }
-.ntab.active { color:var(--text); background:var(--surface2); }
-.ntab.active::after { display:none; }
-.nav-r { display:flex; align-items:center; gap:0.6rem; }
-.user-chip {
-  display:flex; align-items:center; gap:0.5rem;
-  background:var(--surface2); border:1px solid var(--border2);
-  border-radius:20px; padding:0.2rem 0.7rem 0.2rem 0.25rem;
-  cursor:pointer; transition:border-color 0.15s;
-}
-.user-chip:hover { border-color:var(--gold-mid); }
-.uava {
-  width:26px; height:26px; border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),#c4622a);
-  display:flex; align-items:center; justify-content:center;
-  font-size:0.6rem; font-weight:800; color:#0c0c0e;
-}
-.user-chip span { font-size:0.79rem; font-weight:600; }
+/* ─── LANDING ─── */
+.lnav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.hero{display:flex;align-items:center;gap:3rem;padding:4rem 2rem;max-width:1000px;margin:0 auto}
+.hero-l{flex:1;max-width:520px}
+.hero-eyebrow{display:inline-flex;align-items:center;background:var(--al);border:1px solid var(--am);border-radius:20px;padding:.27rem .85rem;font-size:.72rem;font-weight:600;color:var(--accent);margin-bottom:1.75rem}
+.hero-h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.6rem,5vw,3.8rem);line-height:1.0;letter-spacing:-2px;margin-bottom:1.1rem}
+.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:.95rem;color:var(--ink2);line-height:1.75;margin-bottom:1.9rem;font-weight:400}
+.hero-cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.hero-stats{display:flex;gap:2.25rem;padding-top:2rem;border-top:1px solid var(--border)}
+.hstat-n{font-family:'Fraunces',serif;font-weight:700;font-size:1.75rem;color:var(--accent);letter-spacing:-1px;line-height:1}
+.hstat-l{font-size:.72rem;color:var(--ink3);margin-top:.12rem;font-weight:500}
+.hero-r{flex-shrink:0;width:320px;display:flex;flex-direction:column;gap:.75rem}
+.hcard{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:1.2rem;box-shadow:var(--sm)}
+.hcard-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.hava{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;font-family:'Fraunces',serif}
+.hname{font-size:.85rem;font-weight:700}
+.hrole{font-size:.7rem;color:var(--ink3)}
+.hskills{display:flex;flex-direction:column;gap:.4rem}
+.hskr{display:flex;align-items:center;gap:.55rem}
+.hskn{font-size:.7rem;font-weight:500;width:80px;flex-shrink:0}
+.hskb{flex:1;height:3px;background:#f0ede8;border-radius:2px;overflow:hidden}
+.hskf{height:100%;border-radius:2px}
+.hidea{background:var(--accent);border-radius:var(--r);padding:1rem;color:#fff}
+.hidea-l{font-size:.62rem;font-weight:700;opacity:.7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem}
+.hidea-t{font-size:.85rem;font-weight:700;margin-bottom:.45rem}
+.hidea-f{display:flex;align-items:center;justify-content:space-between}
+.hidea-v{font-size:.72rem;opacity:.8}
+.hidea-btn{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:6px;padding:.22rem .65rem;font-size:.7rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
 
-/* ── APP ── */
-.app { padding-top:56px; position:relative; z-index:1; }
-.page { display:none; }
-.page.active { display:block; animation: pageIn 0.3s ease; }
-@keyframes pageIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.how{background:var(--bg);padding:4rem 2rem}
+.how-in{max-width:900px;margin:0 auto}
+.how-label{text-align:center;font-size:.68rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.65rem}
+.how-h{text-align:center;font-family:'Fraunces',serif;font-weight:700;font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.7px;margin-bottom:2.5rem}
+.how-h em{font-style:italic;color:var(--accent)}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.how-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;transition:all .2s}
+.how-card:hover{border-color:var(--am);transform:translateY(-3px);box-shadow:var(--sm)}
+.how-n{font-family:'Fraunces',serif;font-style:italic;font-size:2.25rem;font-weight:600;color:var(--border2);line-height:1;margin-bottom:.45rem}
+.how-icon{font-size:1.3rem;margin-bottom:.6rem}
+.how-ct{font-weight:700;font-size:.88rem;margin-bottom:.3rem;letter-spacing:-.1px}
+.how-cd{font-size:.77rem;color:var(--ink2);line-height:1.6}
 
-.wrap { max-width:1080px; margin:0 auto; padding:2.5rem 1.75rem; }
+/* ─── APP SHELL ─── */
+.sidebar{width:var(--sw);flex-shrink:0;background:var(--white);border-right:1px solid var(--border);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;padding:1.4rem 0;overflow-y:auto;box-shadow:2px 0 12px rgba(26,25,23,.04)}
+.sb-brand{padding:0 1.2rem 1.4rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.sb-bname{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.3px;color:var(--ink)}
+.sb-bname em{color:var(--accent);font-style:italic}
+.sb-btag{font-size:.66rem;color:var(--ink3);margin-top:.08rem;font-weight:500}
+.sb-sec{padding:0 .7rem;margin-bottom:1.2rem}
+.sb-lbl{font-size:.6rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;padding:0 .5rem;margin-bottom:.32rem}
+.sbi{display:flex;align-items:center;gap:.55rem;padding:.46rem .72rem;border-radius:8px;font-size:.82rem;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.sbi:hover{background:var(--bg);color:var(--ink)}
+.sbi.on{background:var(--al);color:var(--accent);font-weight:600}
+.sbi .ico{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:.58rem;font-weight:700;padding:.08rem .38rem;border-radius:10px}
+.sb-bot{margin-top:auto;padding:.85rem .7rem 0;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:.15rem}
+.sb-user:hover{background:var(--bg)}
+.sb-uava{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#2155e8,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;font-family:'Fraunces',serif}
+.sb-uname{font-size:.8rem;font-weight:700}
+.sb-urole{font-size:.66rem;color:var(--ink3)}
 
-/* ── PRIMITIVES ── */
-.btn {
-  display:inline-flex; align-items:center; gap:0.4rem;
-  padding:0.55rem 1.25rem; border-radius:8px; font-size:0.82rem; font-weight:700;
-  cursor:pointer; border:none; transition:all 0.15s;
-  font-family:'Epilogue',sans-serif; letter-spacing:0.01em;
-}
-.btn-gold { background:var(--gold); color:#0c0c0e; }
-.btn-gold:hover { background:#e0b84e; transform:translateY(-1px); box-shadow:0 4px 20px rgba(212,168,67,0.3); }
-.btn-light { background:var(--text); color:#0c0c0e; }
-.btn-light:hover { background:#e0dfdb; transform:translateY(-1px); }
-.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border2); }
-.btn-ghost:hover { color:var(--text); border-color:rgba(255,255,255,0.2); background:var(--surface2); }
-.btn-green { background:var(--green); color:#0c0c0e; }
-.btn-green:hover { background:#4fde9f; transform:translateY(-1px); }
-.btn-sm { padding:0.33rem 0.85rem; font-size:0.75rem; }
+.main{flex:1;min-width:0;overflow-y:auto;height:100vh}
+.page{display:none;animation:fadeUp .25s ease}
+.page.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 2rem 4rem}
 
-.tag {
-  display:inline-block; padding:0.18rem 0.6rem; border-radius:4px;
-  font-size:0.7rem; font-weight:700; letter-spacing:0.03em;
-  font-family:'Epilogue',sans-serif;
-}
-.tg { background:var(--surface3); color:var(--muted); border:1px solid var(--border); }
-.tgold { background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold-mid); }
-.tgreen { background:var(--green-dim); color:var(--green); border:1px solid rgba(62,207,142,0.25); }
-.tblue { background:var(--blue-dim); color:var(--blue); border:1px solid rgba(79,142,247,0.2); }
-.tred { background:var(--red-dim); color:var(--red); border:1px solid rgba(224,82,82,0.2); }
+/* ─── PRIMITIVES ─── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.12rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif}
+.bp{background:var(--accent);color:#fff}
+.bp:hover{background:#1a46d1;transform:translateY(-1px);box-shadow:0 4px 16px rgba(33,85,232,.3)}
+.bo{background:transparent;color:var(--ink);border:1.5px solid var(--border2)}
+.bo:hover{border-color:var(--ink2);background:var(--white)}
+.bg{background:transparent;color:var(--ink2);border:none;padding:.4rem .7rem}
+.bg:hover{color:var(--ink);background:var(--bg)}
+.bgr{background:var(--green);color:#fff}
+.bgr:hover{background:#15803d;transform:translateY(-1px)}
+.bsm{padding:.32rem .8rem;font-size:.75rem}
+.blg{padding:.68rem 1.55rem;font-size:.9rem}
 
-.card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:14px; padding:1.5rem;
-  box-shadow:var(--shadow);
-  transition:border-color 0.2s, box-shadow 0.2s;
-}
-.card:hover { border-color:var(--border2); }
-.card-hover:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+.tag{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .62rem;border-radius:20px;font-size:.7rem;font-weight:600;letter-spacing:.01em}
+.tb{background:var(--al);color:var(--accent);border:1px solid var(--am)}
+.tg{background:var(--gl);color:var(--green);border:1px solid #bbf7d0}
+.ta{background:var(--aml);color:var(--amber);border:1px solid #fde68a}
+.tr{background:var(--rl);color:var(--rose);border:1px solid #fecdd3}
+.tn{background:#f4f3f0;color:var(--ink2);border:1px solid var(--border)}
 
-.sh { font-size:0.68rem; font-weight:700; color:var(--muted2); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.85rem; }
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;box-shadow:var(--ss);transition:box-shadow .2s,border-color .2s}
+.sh{font-size:.67rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.82rem}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.sec-title{font-family:'Fraunces',serif;font-weight:600;font-size:1rem;letter-spacing:-.2px;display:flex;align-items:center;gap:.42rem}
 
-/* ═══ LANDING ═══ */
-#landing { }
-.landing-hero {
-  min-height: calc(100vh - 56px);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding:4rem 2rem;
-  position:relative;
-}
-.hero-glow {
-  position:absolute; top:20%; left:50%; transform:translateX(-50%);
-  width:600px; height:300px;
-  background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 70%);
-  pointer-events:none;
-}
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:0.5rem;
-  background:var(--surface2); border:1px solid var(--border2);
-  border-radius:20px; padding:0.3rem 0.85rem;
-  font-size:0.75rem; font-weight:600; color:var(--muted);
-  margin-bottom:2rem; letter-spacing:0.04em;
-}
-.hero-eyebrow span { color:var(--gold); }
-.hero-h1 {
-  font-family:'Epilogue',sans-serif; font-weight:900;
-  font-size:clamp(2.8rem, 6vw, 4.5rem); line-height:1.0;
-  letter-spacing:-2px; margin-bottom:1.25rem;
-  max-width:800px;
-}
-.hero-h1 em {
-  font-family:'Instrument Serif',serif; font-style:italic;
-  font-weight:400; color:var(--gold); letter-spacing:-1px;
-}
-.hero-sub {
-  font-size:1rem; color:var(--muted); max-width:520px;
-  line-height:1.7; margin-bottom:2.5rem; font-weight:400;
-}
-.hero-cta { display:flex; gap:0.75rem; justify-content:center; margin-bottom:4rem; }
+/* ─── DASHBOARD ─── */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.82rem;margin-bottom:1.65rem}
+.dstat{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;text-align:center;box-shadow:var(--ss)}
+.dstat-n{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:700;line-height:1}
+.dstat-l{font-size:.66rem;color:var(--ink3);margin-top:.18rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.dash-grid{display:grid;grid-template-columns:1fr 290px;gap:1.4rem}
+.team-row-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.88rem 1rem;cursor:pointer;transition:all .15s;margin-bottom:.65rem}
+.team-row-item:hover{border-color:var(--am);box-shadow:var(--ss)}
+.team-avas{display:flex}
+.tava{width:19px;height:19px;border-radius:50%;border:2px solid var(--white);margin-left:-5px;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:700;color:#fff}
+.tava:first-child{margin-left:0}
+.pbar-wrap{margin-bottom:.7rem}
+.pbar-top{display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.32rem}
+.pbar{height:5px;background:#f0ede8;border-radius:3px;overflow:hidden}
+.pbar-fill{height:100%;background:var(--accent);border-radius:3px}
 
-.hero-stats {
-  display:flex; gap:3rem; justify-content:center;
-  padding-top:2.5rem; border-top:1px solid var(--border);
-}
-.hstat-num {
-  font-family:'Epilogue',sans-serif; font-weight:900; font-size:2rem;
-  color:var(--gold); letter-spacing:-1px;
-}
-.hstat-label { font-size:0.78rem; color:var(--muted); margin-top:0.15rem; }
+/* ─── PROFILE ─── */
+.ph{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.9rem;margin-bottom:1.2rem;box-shadow:var(--ss);position:relative;overflow:hidden}
+.ph::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#7c3aed,#db2777)}
+.ph-top{display:flex;align-items:flex-start;gap:1.4rem;margin-bottom:1.4rem}
+.ph-ava-wrap{position:relative;flex-shrink:0}
+.ph-ava{width:74px;height:74px;border-radius:17px;background:linear-gradient(135deg,#2155e8,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.45rem;font-weight:700;color:#fff}
+.ph-dot{position:absolute;bottom:-2px;right:-2px;width:15px;height:15px;border-radius:50%;background:var(--green);border:3px solid var(--white)}
+.ph-name{font-family:'Fraunces',serif;font-weight:700;font-size:1.6rem;letter-spacing:-.5px;line-height:1.1;margin-bottom:.28rem}
+.ph-role{font-size:.88rem;color:var(--ink2);margin-bottom:.55rem}
+.ph-chips{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:.7rem}
+.ph-links{display:flex;gap:.38rem;flex-wrap:wrap}
+.ph-link{display:inline-flex;align-items:center;gap:.28rem;font-size:.73rem;color:var(--ink2);font-weight:500;padding:.2rem .58rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s}
+.ph-link:hover{color:var(--accent);border-color:var(--am);background:var(--al)}
+.ph-bio{font-size:.84rem;color:var(--ink2);line-height:1.7;padding:.88rem .95rem;background:var(--bg);border-radius:9px;border-left:3px solid var(--accent);margin-bottom:1.2rem}
+.ph-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.62rem}
+.phstat{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.75rem;text-align:center}
+.phstat-n{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--accent);line-height:1}
+.phstat-l{font-size:.6rem;color:var(--ink3);margin-top:.14rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.2rem}
+.skill-rows{display:flex;flex-direction:column;gap:.62rem}
+.skillr{display:flex;align-items:center;gap:.62rem}
+.skillr-n{font-size:.78rem;font-weight:500;width:115px;flex-shrink:0}
+.skillr-t{flex:1;height:4px;background:#f0ede8;border-radius:2px;overflow:hidden}
+.skillr-f{height:100%;border-radius:2px}
+.skillr-l{font-size:.66rem;color:var(--ink3);width:68px;text-align:right;flex-shrink:0}
+.otags{display:flex;gap:.32rem;flex-wrap:wrap;margin-top:.82rem;padding-top:.82rem;border-top:1px solid var(--border)}
+.ptabs{display:flex;gap:.18rem;margin-bottom:.95rem;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--border);width:fit-content}
+.ptab{padding:.27rem .82rem;border-radius:6px;font-size:.76rem;font-weight:600;background:none;border:none;color:var(--ink2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ptab.on{background:var(--white);color:var(--ink);box-shadow:var(--ss)}
+.plist{display:flex;flex-direction:column;gap:.82rem}
+.pcard{border:1.5px solid var(--border);border-radius:11px;padding:1.1rem;transition:all .2s;background:var(--white)}
+.pcard:hover{border-color:var(--border2);box-shadow:var(--sm);transform:translateY(-1px)}
+.pcard-n{font-family:'Fraunces',serif;font-weight:600;font-size:.93rem;letter-spacing:-.2px;margin-bottom:.22rem}
+.pcard-d{font-size:.78rem;color:var(--ink2);line-height:1.6;margin-bottom:.62rem}
+.pcard-tags{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.62rem}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.38rem}
+.pcard-meta{display:flex;align-items:center;gap:.72rem}
+.pcard-mi{display:flex;align-items:center;gap:.24rem;font-size:.7rem;color:var(--ink3)}
+.pcard-links{display:flex;gap:.32rem}
+.plbtn{display:inline-flex;align-items:center;gap:.26rem;font-size:.7rem;font-weight:600;color:var(--ink2);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.2rem .52rem;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.plbtn:hover{color:var(--accent);border-color:var(--am);background:var(--al)}
+.rpill{display:inline-flex;align-items:center;background:var(--al);color:var(--accent);border:1px solid var(--am);border-radius:20px;padding:.15rem .58rem;font-size:.67rem;font-weight:700;flex-shrink:0}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:.38rem;width:100%;padding:.58rem;border-radius:9px;border:1.5px dashed var(--border2);background:transparent;color:var(--ink3);font-size:.77rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;margin-top:.72rem}
+.add-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--al)}
+.end-list{display:flex;flex-direction:column;gap:.82rem}
+.end-card{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.92rem .98rem}
+.end-q{font-size:.82rem;color:var(--ink2);line-height:1.65;margin-bottom:.58rem;font-style:italic}
+.end-q::before{content:'"';color:var(--accent);font-size:1.1rem;font-family:'Fraunces',serif;line-height:0;vertical-align:-.28em;margin-right:.08rem}
+.end-auth{display:flex;align-items:center;gap:.42rem}
+.end-ava{width:23px;height:23px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;color:#fff;flex-shrink:0}
+.end-n{font-size:.75rem;font-weight:600}
+.end-s{font-size:.67rem;color:var(--ink3)}
+.end-p{margin-left:auto;font-size:.65rem;color:var(--ink3)}
+.cert-list{display:flex;flex-direction:column;gap:.52rem}
+.cert-item{display:flex;align-items:center;gap:.68rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.68rem .88rem}
+.cert-n{font-size:.8rem;font-weight:600;flex:1}
+.cert-p{font-size:.68rem;color:var(--ink3)}
+.mode-tog{display:flex;gap:.18rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:3px}
+.mtbtn{padding:.27rem .78rem;border-radius:6px;font-size:.74rem;font-weight:600;background:none;border:none;color:var(--ink2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.mtbtn.on{background:var(--white);color:var(--ink);box-shadow:var(--ss)}
+.pub-banner{display:none;align-items:center;justify-content:space-between;background:var(--gl);border:1px solid #bbf7d0;border-radius:9px;padding:.62rem .95rem;margin-bottom:1.2rem;font-size:.78rem;color:var(--green);font-weight:500}
+body.pub .pub-banner{display:flex}
+body.pub .edit-only{display:none!important}
+.ptopbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem}
+.ptopbar h2{font-family:'Fraunces',serif;font-weight:700;font-size:1.18rem;letter-spacing:-.3px}
 
-.how-section { padding:5rem 2rem; max-width:1080px; margin:0 auto; }
-.how-label {
-  text-align:center; font-size:0.72rem; font-weight:700;
-  color:var(--muted2); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:1rem;
-}
-.how-title {
-  text-align:center; font-family:'Epilogue',sans-serif; font-weight:900;
-  font-size:clamp(1.8rem,3.5vw,2.5rem); letter-spacing:-1px; margin-bottom:3.5rem;
-}
-.how-title em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
+/* ─── IDEAS ─── */
+.itopbar{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:1.4rem;margin-bottom:1.4rem;border-bottom:1px solid var(--border)}
+.itopbar h2{font-family:'Fraunces',serif;font-weight:700;font-size:1.55rem;letter-spacing:-.5px;line-height:1.08}
+.itopbar h2 em{font-style:italic;color:var(--accent)}
+.itopbar p{font-size:.82rem;color:var(--ink2);margin-top:.28rem}
+.filters{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.fchip{padding:.26rem .8rem;border-radius:20px;font-size:.74rem;font-weight:600;background:var(--white);border:1.5px solid var(--border);color:var(--ink2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.fchip:hover{color:var(--ink);border-color:var(--border2)}
+.fchip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ilayout{display:grid;grid-template-columns:1fr 280px;gap:1.4rem}
+.ilist{display:flex;flex-direction:column;gap:.82rem}
+.icard-inner{display:flex;gap:.82rem}
+.ivote{display:flex;flex-direction:column;align-items:center;background:var(--white);border:1.5px solid var(--border);border-radius:9px;padding:.48rem .58rem;gap:.04rem;cursor:pointer;transition:all .15s;flex-shrink:0;align-self:flex-start;min-width:44px}
+.ivote:hover,.ivote.on{background:var(--al);border-color:var(--am)}
+.ivote.on .va,.ivote.on .vc{color:var(--accent)}
+.va{font-size:.7rem;color:var(--ink3);transition:color .15s}
+.vc{font-size:.92rem;font-weight:800;color:var(--ink);line-height:1;font-family:'Fraunces',serif}
+.vw{font-size:.55rem;color:var(--ink3);font-weight:600}
+.ibody{flex:1}
+.ihead{display:flex;align-items:flex-start;justify-content:space-between;gap:.58rem;margin-bottom:.28rem}
+.ititle{font-family:'Fraunces',serif;font-size:.93rem;font-weight:600;letter-spacing:-.18px}
+.idesc{font-size:.78rem;color:var(--ink2);line-height:1.6;margin-bottom:.62rem}
+.itags{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.62rem}
+.ifooter{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.38rem}
+.imeta{display:flex;align-items:center;gap:.38rem;font-size:.68rem;color:var(--ink3)}
+.iava{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:700;color:#fff;flex-shrink:0}
+.iactions{display:flex;align-items:center;gap:.42rem}
+.iavas{display:flex}
+.iava2{width:16px;height:16px;border-radius:50%;border:2px solid var(--white);margin-left:-4px;display:flex;align-items:center;justify-content:center;font-size:.42rem;font-weight:700;color:#fff}
+.iava2:first-child{margin-left:0}
+.icount{font-size:.68rem;color:var(--green);font-weight:700}
+.intbtn{display:flex;align-items:center;gap:.26rem;padding:.25rem .65rem;border-radius:6px;background:var(--white);border:1.5px solid var(--border2);font-size:.7rem;font-weight:700;cursor:pointer;color:var(--ink2);transition:all .15s;font-family:'DM Sans',sans-serif}
+.intbtn:hover,.intbtn.on{background:var(--gl);border-color:#bbf7d0;color:var(--green)}
+.isb-sticky{position:sticky;top:2rem;display:flex;flex-direction:column;gap:.95rem}
+.post-cta{background:var(--accent);border-radius:var(--r);padding:1.3rem;cursor:pointer;transition:all .2s}
+.post-cta:hover{background:#1a46d1;transform:translateY(-2px);box-shadow:0 8px 24px rgba(33,85,232,.25)}
+.post-cta h3{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.22rem}
+.post-cta p{font-size:.73rem;color:rgba(255,255,255,.7);line-height:1.55;margin-bottom:.8rem}
+.post-cta-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:7px;padding:.38rem .95rem;font-size:.75rem;font-weight:700;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;transition:all .15s}
+.post-cta-btn:hover{background:rgba(255,255,255,.25)}
+.fi-item{padding:.55rem 0;border-bottom:1px solid var(--border)}
+.fi-item:last-child{border-bottom:none}
+.fi-name{font-size:.78rem;font-weight:600;margin-bottom:.1rem}
+.fi-sub{font-size:.67rem;color:var(--ink3)}
 
-.how-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
-.how-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:14px; padding:1.5rem;
-  position:relative; overflow:hidden;
-  transition:border-color 0.2s, transform 0.2s;
-}
-.how-card:hover { border-color:var(--border2); transform:translateY(-3px); }
-.how-num {
-  font-family:'Instrument Serif',serif; font-style:italic;
-  font-size:3rem; font-weight:400; color:var(--surface3);
-  position:absolute; top:1rem; right:1.25rem; line-height:1;
-  user-select:none;
-}
-.how-icon { font-size:1.5rem; margin-bottom:0.75rem; }
-.how-card-title { font-size:0.92rem; font-weight:800; margin-bottom:0.4rem; letter-spacing:-0.2px; }
-.how-card-desc { font-size:0.78rem; color:var(--muted); line-height:1.6; }
+/* ─── TEAM ─── */
+.tswitcher{display:flex;gap:.45rem;margin-bottom:1.65rem;align-items:center;flex-wrap:wrap}
+.tsbtn{padding:.33rem .95rem;border-radius:20px;font-size:.76rem;font-weight:600;background:var(--white);border:1.5px solid var(--border);color:var(--ink2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.tsbtn:hover{border-color:var(--border2);color:var(--ink)}
+.tsbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tsadd{display:flex;align-items:center;gap:.28rem;padding:.33rem .82rem;border-radius:20px;font-size:.73rem;font-weight:600;background:transparent;border:1.5px dashed var(--border2);color:var(--ink3);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.tsadd:hover{border-color:var(--accent);color:var(--accent)}
+.thead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem}
+.tpname{font-family:'Fraunces',serif;font-weight:700;font-size:1.45rem;letter-spacing:-.5px}
+.tpsub{font-size:.78rem;color:var(--ink2);margin-top:.14rem}
+.mbrs{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.mbr{display:flex;align-items:center;gap:.52rem;background:var(--white);border:1px solid var(--border);border-radius:9px;padding:.58rem .82rem;cursor:pointer;transition:all .15s;box-shadow:var(--ss)}
+.mbr:hover{border-color:var(--am);transform:translateY(-1px);box-shadow:var(--sm)}
+.mava{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;flex-shrink:0}
+.mname{font-size:.78rem;font-weight:700}
+.mrole{font-size:.66rem;color:var(--ink3)}
+.monline{width:6px;height:6px;border-radius:50%;margin-left:auto;flex-shrink:0}
+.tlayout{display:grid;grid-template-columns:1fr 262px;gap:1.4rem}
+.ubox{background:var(--white);border:1px solid var(--border);border-radius:11px;padding:.95rem;margin-bottom:.95rem;box-shadow:var(--ss)}
+.ubox-top{display:flex;gap:.62rem;margin-bottom:.62rem}
+.uava-sm{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:#fff;flex-shrink:0}
+.uinput{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:.58rem .82rem;resize:none;min-height:65px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .15s}
+.uinput:focus{border-color:var(--am);background:var(--white)}
+.uinput::placeholder{color:var(--ink3)}
+.ubox-foot{display:flex;justify-content:flex-end}
+.ufeed{display:flex;flex-direction:column}
+.uitem{display:flex;gap:.72rem;padding:.88rem 0;border-bottom:1px solid var(--border)}
+.uitem:last-child{border-bottom:none}
+.uava-col{display:flex;flex-direction:column;align-items:center}
+.uline{flex:1;width:1px;background:var(--border);margin-top:4px}
+.ubody{flex:1}
+.uhead{display:flex;align-items:center;gap:.42rem;margin-bottom:.26rem;flex-wrap:wrap}
+.uauthor{font-size:.78rem;font-weight:700}
+.utime{font-size:.66rem;color:var(--ink3)}
+.utext{font-size:.78rem;color:var(--ink2);line-height:1.6;margin-bottom:.36rem}
+.ufile{display:inline-flex;align-items:center;gap:.28rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.28rem .58rem;font-size:.68rem;color:var(--ink2)}
+.ureacts{display:flex;gap:.26rem;margin-top:.38rem}
+.react{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:.1rem .46rem;font-size:.7rem;cursor:pointer;transition:all .15s}
+.react:hover{border-color:var(--am);background:var(--al)}
+.tsb-sticky{position:sticky;top:2rem;display:flex;flex-direction:column;gap:.95rem}
+.origin-card{background:var(--al);border:1.5px solid var(--am);border-radius:11px;padding:1.05rem}
+.origin-l{font-size:.6rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.32rem}
+.origin-t{font-size:.85rem;font-weight:700;margin-bottom:.18rem}
+.origin-s{font-size:.7rem;color:var(--ink2)}
+.prog-list{display:flex;flex-direction:column;gap:.08rem}
+.pi{font-size:.76rem;padding:.26rem 0;color:var(--ink2)}
+.pi.done{color:var(--green)}
+.pi.cur{color:var(--amber);font-weight:600}
 
-/* ═══ PROFILE ═══ */
-#profile .wrap { display:grid; grid-template-columns:290px 1fr; gap:1.5rem; align-items:start; }
+/* ─── MODALS ─── */
+.overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(26,25,23,.4);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.8rem;width:495px;max-width:100%;box-shadow:var(--sl);animation:fadeUp .2s ease}
+.mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.35rem}
+.mtitle{font-family:'Fraunces',serif;font-weight:700;font-size:1.02rem;letter-spacing:-.18px}
+.mclose{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:var(--bg);color:var(--ink)}
+.ff{margin-bottom:.88rem}
+.fl{display:block;font-size:.68rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.36rem}
+.fi{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:.58rem .82rem;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--am);background:var(--white)}
+.fi::placeholder{color:var(--ink3)}
+textarea.fi{resize:vertical;min-height:76px}
+.fi-row{display:grid;grid-template-columns:1fr 1fr;gap:.68rem}
+.mfoot{display:flex;gap:.62rem;justify-content:flex-end;margin-top:1.18rem}
+.pm-top{display:flex;gap:.88rem;margin-bottom:1.05rem}
+.pm-ava{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;color:#fff;flex-shrink:0}
+.pm-name{font-family:'Fraunces',serif;font-size:.92rem;font-weight:700;margin-bottom:.07rem}
+.pm-role{font-size:.74rem;color:var(--ink2);margin-bottom:.42rem}
+.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.42rem;margin-bottom:.85rem}
+.pmstat{background:var(--bg);border-radius:7px;padding:.52rem;text-align:center}
+.pmstat-n{font-size:1rem;font-weight:800;color:var(--accent);font-family:'Fraunces',serif}
+.pmstat-l{font-size:.58rem;color:var(--ink3)}
+.toast{position:fixed;bottom:1.65rem;right:1.65rem;z-index:400;background:var(--ink);color:#fff;border-radius:9px;padding:.65rem 1rem;font-size:.78rem;font-weight:500;box-shadow:var(--sl);animation:fadeUp .2s ease;max-width:295px}
 
-.profile-card { position:sticky; top:70px; }
-.pava-wrap { margin-bottom:1.25rem; position:relative; }
-.pava {
-  width:68px; height:68px; border-radius:15px;
-  background:linear-gradient(135deg,var(--gold),#c4622a);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.35rem; font-weight:900; color:#0c0c0e;
-}
-.open-badge {
-  position:absolute; bottom:-5px; left:50px;
-  background:var(--green); color:#0c0c0e;
-  font-size:0.6rem; font-weight:800; padding:0.15rem 0.45rem;
-  border-radius:10px; border:2px solid var(--bg); letter-spacing:0.03em;
-}
-.pname { font-size:1.15rem; font-weight:900; letter-spacing:-0.3px; margin-bottom:0.15rem; }
-.prole { font-size:0.8rem; color:var(--muted); margin-bottom:0.1rem; }
-.puni { font-size:0.75rem; color:var(--muted2); margin-bottom:0.85rem; }
-.pchips { display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:1.1rem; }
-.pdiv { height:1px; background:var(--border); margin:1rem 0; }
-.pstats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin-bottom:1.1rem; }
-.pstat { background:var(--surface2); border-radius:8px; padding:0.65rem 0.4rem; text-align:center; }
-.pstat-n { font-size:1.2rem; font-weight:900; color:var(--gold); font-family:'Epilogue',sans-serif; line-height:1; }
-.pstat-l { font-size:0.62rem; color:var(--muted2); margin-top:0.15rem; }
-
-.profile-r { display:flex; flex-direction:column; gap:1.25rem; }
-
-.skill-rows { display:flex; flex-direction:column; gap:0.65rem; }
-.skillr { display:flex; align-items:center; gap:0.75rem; }
-.skillr-name { font-size:0.8rem; font-weight:500; width:125px; flex-shrink:0; }
-.skillr-track { flex:1; height:4px; background:var(--surface3); border-radius:2px; overflow:hidden; }
-.skillr-fill { height:100%; border-radius:2px; transition:width 1s ease; }
-.skillr-lv { font-size:0.68rem; color:var(--muted2); width:68px; text-align:right; flex-shrink:0; }
-
-.proj-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
-.ptile {
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:10px; padding:1rem; cursor:pointer;
-  transition:all 0.15s; position:relative; overflow:hidden;
-}
-.ptile:hover { border-color:var(--gold-mid); transform:translateY(-2px); background:var(--surface); }
-.ptile-bar { position:absolute; top:0; left:0; right:0; height:2px; }
-.ptile-name { font-size:0.85rem; font-weight:800; margin-bottom:0.25rem; letter-spacing:-0.2px; }
-.ptile-desc { font-size:0.73rem; color:var(--muted); line-height:1.45; margin-bottom:0.6rem; }
-.ptile-tags { display:flex; gap:0.3rem; flex-wrap:wrap; }
-
-/* ═══ IDEAS ═══ */
-#ideas .wrap { }
-.ideas-top {
-  display:flex; align-items:flex-end; justify-content:space-between;
-  padding-bottom:1.75rem; margin-bottom:1.75rem;
-  border-bottom:1px solid var(--border);
-}
-.ideas-top-l h1 {
-  font-family:'Epilogue',sans-serif; font-weight:900;
-  font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-1px; line-height:1.05;
-}
-.ideas-top-l h1 em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
-.ideas-top-l p { color:var(--muted); font-size:0.85rem; margin-top:0.35rem; }
-
-.filters { display:flex; gap:0.35rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-.fchip {
-  padding:0.28rem 0.85rem; border-radius:20px; font-size:0.76rem; font-weight:600;
-  background:var(--surface); border:1px solid var(--border);
-  color:var(--muted); cursor:pointer; transition:all 0.15s;
-  font-family:'Epilogue',sans-serif;
-}
-.fchip:hover { color:var(--text); border-color:var(--border2); }
-.fchip.on { background:var(--text); color:var(--bg); border-color:var(--text); }
-
-.ideas-body { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; }
-
-.ilist { display:flex; flex-direction:column; gap:0.85rem; }
-.icard { cursor:default; }
-.icard-inner { display:flex; gap:1rem; }
-
-.ivote {
-  display:flex; flex-direction:column; align-items:center;
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:9px; padding:0.55rem 0.65rem; gap:0.05rem;
-  cursor:pointer; transition:all 0.15s; flex-shrink:0; align-self:flex-start; min-width:48px;
-}
-.ivote:hover, .ivote.on { background:var(--gold-dim); border-color:var(--gold-mid); }
-.ivote.on .va, .ivote.on .vc { color:var(--gold); }
-.va { font-size:0.75rem; color:var(--muted2); transition:color 0.15s; }
-.vc { font-size:1rem; font-weight:900; color:var(--text); line-height:1; font-family:'Epilogue',sans-serif; }
-.vw { font-size:0.58rem; color:var(--muted2); font-weight:600; }
-
-.ibody { flex:1; }
-.ihead { display:flex; align-items:flex-start; justify-content:space-between; gap:0.75rem; margin-bottom:0.35rem; }
-.ititle { font-size:0.95rem; font-weight:800; letter-spacing:-0.2px; }
-.idesc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.7rem; }
-.itags { display:flex; gap:0.3rem; flex-wrap:wrap; margin-bottom:0.7rem; }
-.ifooter { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
-.imeta { display:flex; align-items:center; gap:0.45rem; font-size:0.72rem; color:var(--muted2); }
-.iava { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.5rem; font-weight:800; color:#0c0c0e; flex-shrink:0; }
-.iactions { display:flex; align-items:center; gap:0.5rem; }
-.intbtn {
-  display:flex; align-items:center; gap:0.3rem;
-  padding:0.28rem 0.7rem; border-radius:6px;
-  background:var(--surface2); border:1px solid var(--border2);
-  font-size:0.72rem; font-weight:700; cursor:pointer; color:var(--muted);
-  transition:all 0.15s; font-family:'Epilogue',sans-serif;
-}
-.intbtn:hover { background:var(--green-dim); border-color:rgba(62,207,142,0.3); color:var(--green); }
-.intbtn.on { background:var(--green-dim); border-color:rgba(62,207,142,0.3); color:var(--green); }
-.iavas { display:flex; }
-.iava2 { width:18px; height:18px; border-radius:50%; border:2px solid var(--surface); margin-left:-5px; display:flex; align-items:center; justify-content:center; font-size:0.45rem; font-weight:800; color:#0c0c0e; }
-.iava2:first-child { margin-left:0; }
-.icount { font-size:0.72rem; color:var(--green); font-weight:700; }
-
-/* idea sidebar */
-.isidebar .isticky { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
-.post-cta {
-  background:var(--gold); border-radius:12px; padding:1.4rem; cursor:pointer;
-  transition:all 0.2s;
-}
-.post-cta:hover { background:#e0b84e; transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,168,67,0.25); }
-.post-cta h3 { font-size:0.95rem; font-weight:900; color:#0c0c0e; margin-bottom:0.25rem; }
-.post-cta p { font-size:0.76rem; color:rgba(12,12,14,0.65); line-height:1.5; margin-bottom:0.85rem; }
-.post-cta-btn {
-  background:#0c0c0e; color:var(--gold); font-family:'Epilogue',sans-serif;
-  font-size:0.78rem; font-weight:800; padding:0.45rem 1rem;
-  border-radius:7px; border:none; cursor:pointer; width:100%; transition:all 0.15s;
-}
-.post-cta-btn:hover { background:#1a1a1f; }
-
-.forming-item { padding:0.6rem 0; border-bottom:1px solid var(--border); }
-.forming-item:last-child { border-bottom:none; }
-.forming-name { font-size:0.8rem; font-weight:700; margin-bottom:0.15rem; }
-.forming-sub { font-size:0.7rem; color:var(--muted2); }
-
-/* ═══ TEAM ═══ */
-#team .wrap { }
-.team-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:2rem; }
-.team-pname { font-size:1.7rem; font-weight:900; letter-spacing:-0.8px; margin-bottom:0.2rem; }
-.team-psub { font-size:0.82rem; color:var(--muted); }
-
-.mbrs { display:flex; gap:0.65rem; flex-wrap:wrap; margin-bottom:1.75rem; }
-.mbr {
-  display:flex; align-items:center; gap:0.6rem;
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:10px; padding:0.7rem 0.9rem;
-  cursor:pointer; transition:all 0.15s; box-shadow:var(--shadow);
-}
-.mbr:hover { border-color:var(--gold-mid); transform:translateY(-1px); }
-.mava { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
-.mname { font-size:0.82rem; font-weight:700; }
-.mrole { font-size:0.7rem; color:var(--muted2); }
-.monline { width:7px; height:7px; border-radius:50%; margin-left:auto; flex-shrink:0; }
-
-.team-body { display:grid; grid-template-columns:1fr 280px; gap:1.5rem; }
-
-.update-box {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; padding:1rem; margin-bottom:1.1rem;
-}
-.update-box-top { display:flex; gap:0.7rem; margin-bottom:0.75rem; }
-.uinput {
-  flex:1; background:var(--surface2); border:1px solid var(--border2);
-  border-radius:8px; padding:0.65rem 0.85rem; resize:none; min-height:72px;
-  font-family:'Epilogue',sans-serif; font-size:0.83rem; color:var(--text);
-  outline:none; transition:border-color 0.15s;
-}
-.uinput:focus { border-color:var(--gold-mid); }
-.uinput::placeholder { color:var(--muted2); }
-.ub-bottom { display:flex; justify-content:flex-end; }
-
-.ufeed { display:flex; flex-direction:column; }
-.uitem { display:flex; gap:0.8rem; padding:1rem 0; border-bottom:1px solid var(--border); }
-.uitem:last-child { border-bottom:none; }
-.uava-col { display:flex; flex-direction:column; align-items:center; }
-.uava { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
-.uline { flex:1; width:1px; background:var(--border); margin-top:4px; }
-.ubody { flex:1; }
-.uhead { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem; flex-wrap:wrap; }
-.uauthor { font-size:0.8rem; font-weight:800; }
-.utime { font-size:0.7rem; color:var(--muted2); }
-.utext { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.4rem; }
-.ufile {
-  display:inline-flex; align-items:center; gap:0.35rem;
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:6px; padding:0.35rem 0.65rem; font-size:0.72rem; color:var(--muted);
-}
-.ureacts { display:flex; gap:0.3rem; margin-top:0.45rem; }
-.react {
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:20px; padding:0.12rem 0.5rem;
-  font-size:0.73rem; cursor:pointer; transition:all 0.15s;
-}
-.react:hover { border-color:var(--gold-mid); background:var(--gold-dim); }
-
-.team-sidebar-sticky { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
-.origin-card {
-  background:var(--gold-dim); border:1px solid var(--gold-mid);
-  border-radius:12px; padding:1.1rem;
-}
-.origin-label { font-size:0.64rem; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.35rem; }
-.origin-title { font-size:0.88rem; font-weight:800; margin-bottom:0.2rem; }
-.origin-sub { font-size:0.73rem; color:var(--muted); }
-
-.progress-list { display:flex; flex-direction:column; gap:0.1rem; }
-.prog-item { font-size:0.78rem; padding:0.3rem 0; color:var(--muted); line-height:1.4; }
-.prog-item.done { color:var(--green); }
-.prog-item.active { color:var(--gold); font-weight:600; }
-
-/* ═══ INTERNSHIPS ═══ */
-#internships .wrap { }
-.intern-top {
-  display:flex; align-items:flex-end; justify-content:space-between;
-  padding-bottom:1.75rem; margin-bottom:1.75rem;
-  border-bottom:1px solid var(--border);
-}
-.intern-top-l h1 {
-  font-family:'Epilogue',sans-serif; font-weight:900;
-  font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-1px; line-height:1.05;
-}
-.intern-top-l h1 em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--gold); }
-.intern-top-l p { color:var(--muted); font-size:0.85rem; margin-top:0.35rem; }
-
-.intern-body { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; }
-
-.ilist2 { display:flex; flex-direction:column; gap:1rem; }
-.interncard {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:14px; padding:1.4rem; cursor:pointer;
-  transition:all 0.2s; box-shadow:var(--shadow);
-}
-.interncard:hover { border-color:var(--border2); transform:translateY(-2px); box-shadow:var(--shadow-lg); }
-.interncard-top { display:flex; align-items:flex-start; gap:1rem; margin-bottom:0.9rem; }
-.company-logo {
-  width:44px; height:44px; border-radius:10px; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
-  border:1px solid var(--border);
-}
-.company-name { font-size:0.88rem; font-weight:800; margin-bottom:0.1rem; }
-.company-type { font-size:0.72rem; color:var(--muted2); }
-.intern-title { font-size:1rem; font-weight:900; letter-spacing:-0.3px; margin-bottom:0.4rem; }
-.intern-desc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.85rem; }
-.intern-meta { display:flex; gap:1.25rem; margin-bottom:0.85rem; }
-.imeta2 { display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:var(--muted); }
-.intern-footer { display:flex; align-items:center; justify-content:space-between; }
-.intern-match {
-  display:flex; align-items:center; gap:0.4rem; font-size:0.75rem;
-}
-.match-bar { width:60px; height:4px; background:var(--surface3); border-radius:2px; overflow:hidden; }
-.match-fill { height:100%; background:var(--green); border-radius:2px; }
-.match-pct { font-size:0.72rem; color:var(--green); font-weight:700; }
-
-.intern-sidebar .isticky2 { position:sticky; top:70px; display:flex; flex-direction:column; gap:1rem; }
-
-.why-card {
-  background:linear-gradient(135deg,rgba(212,168,67,0.06),rgba(62,207,142,0.04));
-  border:1px solid var(--gold-mid); border-radius:12px; padding:1.25rem;
-}
-.why-title { font-size:0.85rem; font-weight:800; margin-bottom:0.75rem; }
-.why-item { display:flex; gap:0.5rem; font-size:0.76rem; color:var(--muted); margin-bottom:0.5rem; line-height:1.5; }
-.why-icon { flex-shrink:0; color:var(--gold); }
-
-.company-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; }
-.co-item {
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:8px; padding:0.65rem 0.75rem;
-  display:flex; align-items:center; gap:0.5rem;
-  font-size:0.75rem; font-weight:600;
-}
-.co-logo { font-size:1rem; }
-
-/* ═══ MODALS ═══ */
-.overlay {
-  display:none; position:fixed; inset:0; z-index:500;
-  background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
-  align-items:center; justify-content:center; padding:1rem;
-}
-.overlay.open { display:flex; }
-.modal {
-  background:var(--surface); border:1px solid var(--border2);
-  border-radius:16px; padding:2rem; width:480px; max-width:100%;
-  box-shadow:0 32px 80px rgba(0,0,0,0.6);
-  animation: pageIn 0.2s ease;
-}
-.mhead { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; }
-.mtitle { font-size:1.05rem; font-weight:900; letter-spacing:-0.2px; }
-.mclose { background:none; border:none; color:var(--muted2); font-size:1.1rem; cursor:pointer; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
-.mclose:hover { color:var(--text); background:var(--surface2); }
-.ff { margin-bottom:1rem; }
-.fl { display:block; font-size:0.7rem; font-weight:800; color:var(--muted2); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem; }
-.fi {
-  width:100%; background:var(--surface2); border:1px solid var(--border2);
-  border-radius:8px; padding:0.6rem 0.85rem;
-  font-family:'Epilogue',sans-serif; font-size:0.85rem; color:var(--text);
-  outline:none; transition:border-color 0.15s;
-}
-.fi:focus { border-color:var(--gold-mid); }
-.fi::placeholder { color:var(--muted2); }
-textarea.fi { resize:vertical; min-height:85px; }
-.mfooter { display:flex; gap:0.75rem; justify-content:flex-end; margin-top:1.25rem; }
-
-/* profile mini */
-.pm-top { display:flex; gap:1rem; margin-bottom:1.25rem; }
-.pm-ava { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; font-weight:900; color:#0c0c0e; flex-shrink:0; }
-.pm-name { font-size:1rem; font-weight:900; margin-bottom:0.1rem; }
-.pm-role { font-size:0.78rem; color:var(--muted); margin-bottom:0.5rem; }
-.pm-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin-bottom:1.1rem; }
-.pmstat { background:var(--surface2); border-radius:7px; padding:0.6rem; text-align:center; }
-.pmstat-n { font-size:1.1rem; font-weight:900; color:var(--gold); }
-.pmstat-l { font-size:0.62rem; color:var(--muted2); }
-
-/* toast */
-.toast {
-  position:fixed; bottom:1.5rem; right:1.5rem; z-index:600;
-  background:var(--surface); border:1px solid var(--border2);
-  border-radius:10px; padding:0.75rem 1.15rem;
-  font-size:0.82rem; font-weight:500;
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  display:flex; align-items:center; gap:0.5rem;
-  animation: pageIn 0.2s ease;
-  max-width:320px;
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width:900px) {
-  #profile .wrap, .ideas-body, .team-body, .intern-body { grid-template-columns:1fr; }
-  .how-grid { grid-template-columns:repeat(2,1fr); }
-  .isidebar, .intern-sidebar { display:none; }
-  .proj-grid { grid-template-columns:1fr; }
-  .hero-stats { gap:1.5rem; }
-}
-@media (max-width:600px) {
-  .how-grid { grid-template-columns:1fr; }
-  .nav-center { display:none; }
-  .mbrs { flex-direction:column; }
+@media(max-width:768px){
+  .sidebar{display:none}
+  .pgrid,.ilayout,.tlayout,.dash-grid{grid-template-columns:1fr}
+  .how-grid{grid-template-columns:1fr}
+  .ph-stats,.dash-stats{grid-template-columns:repeat(2,1fr)}
+  .hero{flex-direction:column}
+  .hero-r{display:none}
+  .wrap{padding:1.5rem 1rem 4rem}
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="brand">First<span class="brand-accent">work</span></div>
-  <div class="nav-center">
-    <button class="ntab" onclick="go('landing',this)">Home</button>
-    <button class="ntab" onclick="go('profile',this)">Profile</button>
-    <button class="ntab" onclick="go('ideas',this)">Ideas</button>
-    <button class="ntab" onclick="go('team',this)">My Team</button>
-    <button class="ntab" onclick="go('internships',this)">Internships</button>
-  </div>
-  <div class="nav-r">
-    <button class="btn btn-gold btn-sm" onclick="go('profile',document.querySelectorAll('.ntab')[1])">Get Started</button>
-    <div class="user-chip" onclick="go('profile',document.querySelectorAll('.ntab')[1])">
-      <div class="uava">JN</div>
-      <span>Jamie N.</span>
-    </div>
-  </div>
-</nav>
+<!-- ════════════════════════════
+     AUTH (pre-login)
+════════════════════════════ -->
+<div id="authWrap">
 
-<div class="app">
-
-<!-- ═══════ LANDING ═══════ -->
-<div id="landing" class="page active">
-  <div class="landing-hero">
-    <div class="hero-glow"></div>
-    <div class="hero-eyebrow">Built for international IT students · <span>Melbourne, Australia</span></div>
-    <h1 class="hero-h1">Real experience,<br>from <em>day one.</em></h1>
-    <p class="hero-sub">Firstwork connects international IT students with peers, real projects, and industry micro-internships — so you graduate with proof, not just a degree.</p>
-    <div class="hero-cta">
-      <button class="btn btn-gold" onclick="go('profile',document.querySelectorAll('.ntab')[1])">Create Your Profile →</button>
-      <button class="btn btn-ghost" onclick="go('ideas',document.querySelectorAll('.ntab')[2])">Browse Ideas</button>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="hstat-num">847</div>
-        <div class="hstat-label">Students</div>
-      </div>
-      <div>
-        <div class="hstat-num">124</div>
-        <div class="hstat-label">Projects Built</div>
-      </div>
-      <div>
-        <div class="hstat-num">38</div>
-        <div class="hstat-label">Industry Partners</div>
-      </div>
-      <div>
-        <div class="hstat-num">91%</div>
-        <div class="hstat-label">Found Roles</div>
+  <!-- Landing -->
+  <div id="aLanding" class="ascreen on">
+    <div class="lnav">
+      <div class="abrand">First<em>work</em></div>
+      <div style="display:flex;gap:.55rem">
+        <button class="btn bo bsm" onclick="showA('Login')">Log In</button>
+        <button class="btn bp bsm" onclick="showA('Register')">Sign Up Free</button>
       </div>
     </div>
-  </div>
-
-  <div class="how-section">
-    <div class="how-label">How it works</div>
-    <h2 class="how-title">From zero to <em>employed</em> — in four steps</h2>
-    <div class="how-grid">
-      <div class="how-card">
-        <div class="how-num">1</div>
-        <div class="how-icon">👤</div>
-        <div class="how-card-title">Build Your Profile</div>
-        <div class="how-card-desc">Document your skills, projects, and roles honestly. Your profile grows as you do — from year one, not after graduation.</div>
+    <div class="hero">
+      <div class="hero-l">
+        <div class="hero-eyebrow">🇦🇺 Built for international IT students in Melbourne</div>
+        <h1 class="hero-h1">Real work.<br>Real teams.<br><em>Real proof.</em></h1>
+        <p class="hero-sub">Firstwork gives international IT students the one thing their degree doesn't — a record of actual work done with real people, from year one.</p>
+        <div class="hero-cta">
+          <button class="btn bp blg" onclick="showA('Register')">Get Started Free →</button>
+          <button class="btn bo blg" onclick="showA('Login')">Log In</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hstat-n">847</div><div class="hstat-l">Students</div></div>
+          <div><div class="hstat-n">124</div><div class="hstat-l">Projects Built</div></div>
+          <div><div class="hstat-n">38</div><div class="hstat-l">Teams Active</div></div>
+          <div><div class="hstat-n">91%</div><div class="hstat-l">Found Roles</div></div>
+        </div>
       </div>
-      <div class="how-card">
-        <div class="how-num">2</div>
-        <div class="how-icon">💡</div>
-        <div class="how-card-title">Post or Join an Idea</div>
-        <div class="how-card-desc">Post a real problem. Others show interest, you view their profiles, and a team forms naturally — no applications, no rejections.</div>
-      </div>
-      <div class="how-card">
-        <div class="how-num">3</div>
-        <div class="how-icon">🤝</div>
-        <div class="how-card-title">Work as a Team</div>
-        <div class="how-card-desc">Build together in a shared team space. Share updates, document contributions, and ship something real.</div>
-      </div>
-      <div class="how-card">
-        <div class="how-num">4</div>
-        <div class="how-icon">🏢</div>
-        <div class="how-card-title">Land a Micro-Internship</div>
-        <div class="how-card-desc">Companies post structured short-term projects. They discover you through your Firstwork profile — proof beats a resume every time.</div>
+      <div class="hero-r">
+        <div class="hcard">
+          <div class="hcard-head">
+            <div class="hava" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div>
+            <div><div class="hname">Jake Morrison</div><div class="hrole">Backend Dev · RMIT Yr 2</div></div>
+            <span class="tag tg" style="margin-left:auto;font-size:.6rem">● Open</span>
+          </div>
+          <div style="display:flex;gap:.3rem;margin-bottom:.75rem">
+            <span class="tag tb" style="font-size:.6rem">3 Projects</span>
+            <span class="tag tn" style="font-size:.6rem">2 Teams</span>
+          </div>
+          <div class="hskills">
+            <div class="hskr"><span class="hskn">Python</span><div class="hskb"><div class="hskf" style="width:85%;background:#2155e8"></div></div></div>
+            <div class="hskr"><span class="hskn">FastAPI</span><div class="hskb"><div class="hskf" style="width:62%;background:#7c3aed"></div></div></div>
+            <div class="hskr"><span class="hskn">Azure</span><div class="hskb"><div class="hskf" style="width:58%;background:#0891b2"></div></div></div>
+          </div>
+        </div>
+        <div class="hidea">
+          <div class="hidea-l">💡 Trending Idea</div>
+          <div class="hidea-t">Visa Condition & Deadline Tracker</div>
+          <div class="hidea-f">
+            <div class="hidea-v">▲ 94 votes · 3 interested</div>
+            <button class="hidea-btn" onclick="showA('Register')">Join to view →</button>
+          </div>
+        </div>
+        <div class="card" style="padding:.95rem">
+          <div class="sh">Latest Team Update</div>
+          <div style="font-size:.76rem;color:var(--ink2);line-height:1.6">"FastAPI endpoints done — connected to Mia's schema. Ready for Lachlan to hook up the map." <span style="color:var(--ink3)">— Jake · RentWatch</span></div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ═══════ PROFILE ═══════ -->
-<div id="profile" class="page">
-  <div class="wrap">
-    <div>
-      <div class="card profile-card">
-        <div class="pava-wrap">
-          <div class="pava">JN</div>
-          <div class="open-badge">OPEN TO TEAMS</div>
-        </div>
-        <div class="pname">Jamie Nguyen</div>
-        <div class="prole">Backend & Data Engineering</div>
-        <div class="puni">RMIT · Bachelor of IT · Melbourne 🇦🇺</div>
-        <div class="pchips">
-          <span class="tag tgreen">Open to Teams</span>
-          <span class="tag tg">Year 2 · 2025</span>
-          <span class="tag tg">English</span>
-        </div>
-        <div class="pdiv"></div>
-        <div class="pstats">
-          <div class="pstat"><div class="pstat-n">3</div><div class="pstat-l">Projects</div></div>
-          <div class="pstat"><div class="pstat-n">4</div><div class="pstat-l">Teammates</div></div>
-          <div class="pstat"><div class="pstat-n">112</div><div class="pstat-l">Idea Votes</div></div>
-        </div>
-        <button class="btn btn-ghost" style="width:100%;justify-content:center">✏️ Edit Profile</button>
-      </div>
-    </div>
-
-    <div class="profile-r">
-      <div class="card">
-        <div class="sh">Skills</div>
-        <div class="skill-rows">
-          <div class="skillr"><span class="skillr-name">Python</span><div class="skillr-track"><div class="skillr-fill" style="width:85%;background:var(--gold)"></div></div><span class="skillr-lv">Advanced</span></div>
-          <div class="skillr"><span class="skillr-name">Azure / ADF</span><div class="skillr-track"><div class="skillr-fill" style="width:65%;background:var(--green)"></div></div><span class="skillr-lv">Intermediate</span></div>
-          <div class="skillr"><span class="skillr-name">FastAPI</span><div class="skillr-track"><div class="skillr-fill" style="width:60%;background:var(--gold)"></div></div><span class="skillr-lv">Intermediate</span></div>
-          <div class="skillr"><span class="skillr-name">PySpark</span><div class="skillr-track"><div class="skillr-fill" style="width:40%;background:var(--blue)"></div></div><span class="skillr-lv">Familiar</span></div>
-          <div class="skillr"><span class="skillr-name">dbt</span><div class="skillr-track"><div class="skillr-fill" style="width:30%;background:var(--red)"></div></div><span class="skillr-lv">Learning</span></div>
-        </div>
-        <div style="margin-top:1rem;padding-top:0.85rem;border-top:1px solid var(--border);display:flex;gap:0.35rem;flex-wrap:wrap">
-          <span class="tag tg">React</span><span class="tag tg">PostgreSQL</span><span class="tag tg">Docker</span><span class="tag tg">Git</span><span class="tag tg">Java</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem">
-          <div class="sh" style="margin-bottom:0">Projects Built</div>
-          <button class="btn btn-ghost btn-sm">+ Add Project</button>
-        </div>
-        <div class="proj-grid">
-          <div class="ptile" onclick="toast('📂 GazeSpeak — opening project details')">
-            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--green),var(--blue))"></div>
-            <div class="ptile-name">GazeSpeak AAC Tool</div>
-            <div class="ptile-desc">Webcam-only head-tracking communication app for people with limited mobility. Built for a real user.</div>
-            <div class="ptile-tags"><span class="tag tgreen">Shipped</span><span class="tag tg">MediaPipe</span><span class="tag tg">JS</span></div>
-          </div>
-          <div class="ptile" onclick="toast('📂 CCTV System — opening project details')">
-            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--gold),#c4622a)"></div>
-            <div class="ptile-name">CCTV Narrative System</div>
-            <div class="ptile-desc">Gemini 2.0 Flash powered video analysis that generates natural language incident reports.</div>
-            <div class="ptile-tags"><span class="tag tgold">In Progress</span><span class="tag tg">React</span><span class="tag tg">Gemini</span></div>
-          </div>
-          <div class="ptile" onclick="toast('📂 RentWatch — opening project details')">
-            <div class="ptile-bar" style="background:linear-gradient(90deg,var(--gold),var(--green))"></div>
-            <div class="ptile-name">RentWatch Melbourne</div>
-            <div class="ptile-desc">Real-time rental data pipeline with suburb affordability dashboard. Team of 4.</div>
-            <div class="ptile-tags"><span class="tag tgold">Active</span><span class="tag tg">FastAPI</span><span class="tag tg">Python</span></div>
-          </div>
-          <div class="ptile" style="border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:110px" onclick="toast('➕ Add a new project to your profile')">
-            <div style="text-align:center"><div style="font-size:1.4rem;margin-bottom:0.3rem">＋</div><div style="font-size:0.75rem;font-weight:700;color:var(--muted2)">Add project</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="sh">Certifications in Progress</div>
-        <div style="display:flex;flex-direction:column;gap:0.5rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
-            <span>⏳ Microsoft PL-300</span><span class="tag tgold">In Progress</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
-            <span>⏳ Databricks DE Associate</span><span class="tag tgold">In Progress</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem">
-            <span>📅 Databricks GenAI Engineer</span><span class="tag tg">Planned</span>
-          </div>
+    <div class="how">
+      <div class="how-in">
+        <div class="how-label">How it works</div>
+        <h2 class="how-h">From zero to <em>employed</em> in three steps</h2>
+        <div class="how-grid">
+          <div class="how-card"><div class="how-n">01</div><div class="how-icon">👤</div><div class="how-ct">Build a proof-based profile</div><div class="how-cd">Your skills, solo projects, and team work — all in one link. Grows from year one, not after graduation.</div></div>
+          <div class="how-card"><div class="how-n">02</div><div class="how-icon">💡</div><div class="how-ct">Post an idea, find your team</div><div class="how-cd">Post a real problem. Others show interest, you see their profiles, and a team forms naturally — no applications.</div></div>
+          <div class="how-card"><div class="how-n">03</div><div class="how-icon">🚀</div><div class="how-ct">Work, ship, and get hired</div><div class="how-cd">Build together, document contributions, ship something real. Graduate with a track record employers can verify.</div></div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ═══════ IDEAS ═══════ -->
-<div id="ideas" class="page">
-  <div class="wrap">
-    <div class="ideas-top">
-      <div class="ideas-top-l">
-        <h1>Build something<br><em>worth building.</em></h1>
-        <p>Post a problem. Find people who care. Build it together.</p>
+  <!-- Register -->
+  <div id="aRegister" class="ascreen">
+    <div class="acwrap">
+      <div class="acard">
+        <div class="acard-brand">First<em>work</em></div>
+        <div class="acard-title">Create your account</div>
+        <div class="acard-sub">Join 847 students building real experience</div>
+        <div class="aerr" id="regErr">Please check the fields below.</div>
+        <div class="afield"><label class="alabel">Full Name</label><input class="ainput" id="regName" type="text" placeholder="e.g. Jake Morrison"></div>
+        <div class="afield"><label class="alabel">Email Address</label><input class="ainput" id="regEmail" type="email" placeholder="you@email.com"><div class="ahint">Use your personal email — not a university address that expires</div></div>
+        <div class="afield"><label class="alabel">Password</label><input class="ainput" id="regPass" type="password" placeholder="At least 8 characters"></div>
+        <div class="afield"><label class="alabel">Confirm Password</label><input class="ainput" id="regPass2" type="password" placeholder="Repeat your password"></div>
+        <div class="aterms">By signing up you agree to our <span class="alink">Terms of Service</span> and <span class="alink">Privacy Policy</span>.</div>
+        <button class="btn bp" style="width:100%;justify-content:center;padding:.68rem" onclick="doRegister()">Create Account →</button>
+        <div class="aswitch">Already have an account? <span class="alink" onclick="showA('Login')">Log in</span></div>
+        <div style="text-align:center;margin-top:.75rem"><span class="alink" style="font-size:.78rem" onclick="showA('Landing')">← Back to home</span></div>
       </div>
-      <button class="btn btn-gold" onclick="openM('mPostIdea')">+ Post an Idea</button>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="aLogin" class="ascreen">
+    <div class="acwrap">
+      <div class="acard">
+        <div class="acard-brand">First<em>work</em></div>
+        <div class="acard-title">Welcome back</div>
+        <div class="acard-sub">Log in to your Firstwork account</div>
+        <div class="aerr" id="loginErr">Incorrect email or password.</div>
+        <div class="afield"><label class="alabel">Email Address</label><input class="ainput" id="loginEmail" type="email" placeholder="you@email.com"></div>
+        <div class="afield"><label class="alabel">Password</label><input class="ainput" id="loginPass" type="password" placeholder="Your password"><div style="text-align:right;margin-top:.28rem"><span class="alink" style="font-size:.72rem">Forgot password?</span></div></div>
+        <button class="btn bp" style="width:100%;justify-content:center;padding:.68rem" onclick="doLogin()">Log In →</button>
+        <div class="aswitch">New to Firstwork? <span class="alink" onclick="showA('Register')">Create an account</span></div>
+        <div class="adiv"><span>or try the demo</span></div>
+        <button class="btn bo" style="width:100%;justify-content:center" onclick="enterApp('Jake Morrison')">Continue as Jake Morrison (Demo)</button>
+        <div style="text-align:center;margin-top:.75rem"><span class="alink" style="font-size:.78rem" onclick="showA('Landing')">← Back to home</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end authWrap -->
+
+<!-- ════════════════════════════
+     APP (post-login)
+════════════════════════════ -->
+<div id="appWrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-bname">First<em>work</em></div>
+      <div class="sb-btag">Real experience from day one</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Menu</div>
+      <button class="sbi on" onclick="go('dashboard',this)"><span class="ico">⚡</span> Dashboard</button>
+      <button class="sbi" onclick="go('profile',this)"><span class="ico">👤</span> My Profile</button>
+      <button class="sbi" onclick="go('ideas',this)"><span class="ico">💡</span> Idea Board <span class="sb-badge">4</span></button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">My Teams</div>
+      <button class="sbi" id="sbRW" onclick="goTeam('rw',this)"><span class="ico">📊</span> RentWatch</button>
+      <button class="sbi" id="sbET" onclick="goTeam('et',this)"><span class="ico">🌱</span> EcoTrack</button>
+    </div>
+    <div class="sb-bot">
+      <div class="sb-user" onclick="go('profile',document.querySelectorAll('.sbi')[1])">
+        <div class="sb-uava" id="sbAva">JM</div>
+        <div><div class="sb-uname" id="sbName">Jake Morrison</div><div class="sb-urole">RMIT · Year 2</div></div>
+      </div>
+      <button class="sbi" style="color:var(--rose)" onclick="doLogout()"><span class="ico">↩</span> Log Out</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="dashboard" class="page on">
+      <div class="wrap">
+        <div style="margin-bottom:1.85rem">
+          <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:1.45rem;letter-spacing:-.4px;margin-bottom:.18rem">Good morning, <span id="dashName">Jake</span> 👋</h2>
+          <p style="color:var(--ink2);font-size:.86rem">Here's what's happening across your teams and the community.</p>
+        </div>
+        <div class="dash-stats">
+          <div class="dstat"><div class="dstat-n" style="color:var(--accent)">2</div><div class="dstat-l">Active Teams</div></div>
+          <div class="dstat"><div class="dstat-n" style="color:var(--green)">3</div><div class="dstat-l">Open Tasks</div></div>
+          <div class="dstat"><div class="dstat-n" style="color:var(--amber)">4</div><div class="dstat-l">New Votes</div></div>
+          <div class="dstat"><div class="dstat-n" style="color:var(--rose)">1</div><div class="dstat-l">Profile Views</div></div>
+        </div>
+        <div class="dash-grid">
+          <div>
+            <div class="card" style="margin-bottom:1.1rem">
+              <div class="sec-head"><div class="sec-title">⚡ Recent Team Activity</div></div>
+              <div class="ufeed">
+                <div class="uitem">
+                  <div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><div class="uline"></div></div>
+                  <div class="ubody"><div class="uhead"><span class="uauthor">You</span><span class="tag tn" style="font-size:.6rem">RentWatch</span><span class="utime">2h ago</span></div><div class="utext">FastAPI endpoints done and tested. Connected to Mia's schema — ready for Lachlan to hook up the map.</div><div class="ureacts"><div class="react" onclick="ir(this)">🔥 3</div><div class="react" onclick="ir(this)">✅ 2</div></div></div>
+                </div>
+                <div class="uitem">
+                  <div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#7c3aed,#db2777)">MN</div><div class="uline"></div></div>
+                  <div class="ubody"><div class="uhead"><span class="uauthor">Mia Nguyen</span><span class="tag tn" style="font-size:.6rem">RentWatch</span><span class="utime">Yesterday</span></div><div class="utext">Finished historical price trends across 50 Melbourne suburbs. Presenting at Friday standup.</div><div class="ureacts"><div class="react" onclick="ir(this)">🚀 4</div></div></div>
+                </div>
+                <div class="uitem">
+                  <div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#16a34a,#0891b2)">CT</div></div>
+                  <div class="ubody"><div class="uhead"><span class="uauthor">Chloe Tran</span><span class="tag tn" style="font-size:.6rem">EcoTrack</span><span class="utime">1h ago</span></div><div class="utext">Set up React scaffold and component folder structure. Ready for backend wiring.</div><div class="ureacts"><div class="react" onclick="ir(this)">🚀 2</div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="sec-head"><div class="sec-title">🤝 My Active Teams</div></div>
+              <div class="team-row-item" onclick="goTeam('rw',document.getElementById('sbRW'))">
+                <div style="display:flex;align-items:center;gap:.72rem"><span style="font-size:1.1rem">📊</span><div><div style="font-weight:700;font-size:.86rem">RentWatch Melbourne</div><div style="font-size:.7rem;color:var(--ink3)">Sprint 2 of 6 · 3 open tasks</div></div></div>
+                <div style="display:flex;align-items:center;gap:.55rem"><div class="team-avas"><div class="tava" style="background:#7c3aed">MN</div><div class="tava" style="background:#d97706">LW</div><div class="tava" style="background:#db2777">IP</div></div><span class="tag tb" style="font-size:.62rem">Active</span></div>
+              </div>
+              <div class="team-row-item" onclick="goTeam('et',document.getElementById('sbET'))">
+                <div style="display:flex;align-items:center;gap:.72rem"><span style="font-size:1.1rem">🌱</span><div><div style="font-weight:700;font-size:.86rem">EcoTrack Melbourne</div><div style="font-size:.7rem;color:var(--ink3)">Week 1 · Just getting started</div></div></div>
+                <div style="display:flex;align-items:center;gap:.55rem"><div class="team-avas"><div class="tava" style="background:#16a34a">CT</div><div class="tava" style="background:#0891b2">FO</div></div><span class="tag tg" style="font-size:.62rem">New</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.95rem">
+            <div class="card">
+              <div class="sh">💡 Trending Ideas</div>
+              <div class="fi-item" style="cursor:pointer" onclick="go('ideas',document.querySelectorAll('.sbi')[2])"><div class="fi-name">Visa Condition Tracker</div><div class="fi-sub">▲ 94 votes · 3 interested</div></div>
+              <div class="fi-item" style="cursor:pointer" onclick="go('ideas',document.querySelectorAll('.sbi')[2])"><div class="fi-name">AI Resume Gap Analyser</div><div class="fi-sub">▲ 71 votes · 1 interested</div></div>
+              <div class="fi-item" style="cursor:pointer" onclick="go('ideas',document.querySelectorAll('.sbi')[2])"><div class="fi-name">Study Group Matcher</div><div class="fi-sub">▲ 58 votes · open</div></div>
+              <button class="btn bo bsm" style="width:100%;justify-content:center;margin-top:.72rem" onclick="go('ideas',document.querySelectorAll('.sbi')[2])">Browse All Ideas →</button>
+            </div>
+            <div class="card">
+              <div class="sh">👤 Profile Completeness</div>
+              <div class="pbar-wrap"><div class="pbar-top"><span>Strength</span><span style="color:var(--accent);font-weight:700">72%</span></div><div class="pbar"><div class="pbar-fill" style="width:72%"></div></div></div>
+              <div style="display:flex;flex-direction:column;gap:.32rem;font-size:.74rem">
+                <div style="color:var(--green)">✅ Basic info added</div>
+                <div style="color:var(--green)">✅ Skills added</div>
+                <div style="color:var(--green)">✅ Projects added</div>
+                <div style="color:var(--amber)">⏳ Add GitHub link</div>
+                <div style="color:var(--ink3)">⬜ Get first endorsement</div>
+              </div>
+              <button class="btn bo bsm" style="width:100%;justify-content:center;margin-top:.82rem" onclick="go('profile',document.querySelectorAll('.sbi')[1])">Complete Profile →</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="filters">
-      <button class="fchip on">All Ideas</button>
-      <button class="fchip">🔥 Most Voted</button>
-      <button class="fchip">🆕 Newest</button>
-      <button class="fchip">🏗 Team Forming</button>
-      <button class="fchip">🚀 Shipped</button>
+    <!-- ── PROFILE ── -->
+    <div id="profile" class="page">
+      <div class="wrap">
+        <div class="ptopbar">
+          <h2>My Profile</h2>
+          <div style="display:flex;gap:.45rem;align-items:center">
+            <div class="mode-tog">
+              <button class="mtbtn on" id="btnEdit" onclick="setMode('edit')">✏️ Edit</button>
+              <button class="mtbtn" id="btnPub" onclick="setMode('pub')">👁 Public View</button>
+            </div>
+          </div>
+        </div>
+        <div class="pub-banner">
+          <span>👁 This is exactly what a recruiter sees when you share your link.</span>
+          <button class="btn bgr bsm" onclick="setMode('edit')">Back to editing</button>
+        </div>
+        <div class="ph">
+          <div class="ph-top">
+            <div class="ph-ava-wrap"><div class="ph-ava">JM</div><div class="ph-dot"></div></div>
+            <div style="flex:1">
+              <div class="ph-name">Jake Morrison</div>
+              <div class="ph-role">Software & Data Engineering · RMIT University · Melbourne</div>
+              <div class="ph-chips">
+                <span class="tag tg">● Open to Teams</span>
+                <span class="tag tb">Bachelor of IT · Year 2</span>
+                <span class="tag tn">🇦🇺 Full Work Rights</span>
+              </div>
+              <div class="ph-links">
+                <span class="ph-link" onclick="toast('🔗 Opening GitHub...')">⌥ GitHub</span>
+                <span class="ph-link" onclick="toast('🔗 Opening LinkedIn...')">in LinkedIn</span>
+                <span class="ph-link" onclick="toast('📋 Email copied!')">✉ jake@email.com</span>
+              </div>
+            </div>
+            <button class="btn bo bsm edit-only" onclick="openM('mEditProfile')">Edit</button>
+          </div>
+          <div class="ph-bio">Second-year IT student at RMIT building real things with real teams. I work across backend systems and data pipelines — I care about writing clean code that solves actual problems. Currently open to project collaborations and structured work experience.</div>
+          <div class="ph-stats">
+            <div class="phstat"><div class="phstat-n">3</div><div class="phstat-l">Projects</div></div>
+            <div class="phstat"><div class="phstat-n">2</div><div class="phstat-l">Teams</div></div>
+            <div class="phstat"><div class="phstat-n">4</div><div class="phstat-l">Teammates</div></div>
+            <div class="phstat"><div class="phstat-n">3</div><div class="phstat-l">Roles</div></div>
+          </div>
+        </div>
+        <div class="pgrid">
+          <div class="card">
+            <div class="sec-head"><div class="sec-title">⚡ Skills</div><button class="btn bg bsm edit-only" onclick="toast('✏️ Edit skills')">Edit</button></div>
+            <div class="skill-rows">
+              <div class="skillr"><span class="skillr-n">Python</span><div class="skillr-t"><div class="skillr-f" style="width:85%;background:#2155e8"></div></div><span class="skillr-l">Advanced</span></div>
+              <div class="skillr"><span class="skillr-n">FastAPI</span><div class="skillr-t"><div class="skillr-f" style="width:62%;background:#7c3aed"></div></div><span class="skillr-l">Intermediate</span></div>
+              <div class="skillr"><span class="skillr-n">Azure / ADF</span><div class="skillr-t"><div class="skillr-f" style="width:60%;background:#0891b2"></div></div><span class="skillr-l">Intermediate</span></div>
+              <div class="skillr"><span class="skillr-n">PostgreSQL</span><div class="skillr-t"><div class="skillr-f" style="width:58%;background:#16a34a"></div></div><span class="skillr-l">Intermediate</span></div>
+              <div class="skillr"><span class="skillr-n">PySpark</span><div class="skillr-t"><div class="skillr-f" style="width:38%;background:#d97706"></div></div><span class="skillr-l">Familiar</span></div>
+              <div class="skillr"><span class="skillr-n">dbt</span><div class="skillr-t"><div class="skillr-f" style="width:25%;background:#dc2626"></div></div><span class="skillr-l">Learning</span></div>
+            </div>
+            <div class="otags"><span class="tag tn">React</span><span class="tag tn">Docker</span><span class="tag tn">Git</span><span class="tag tn">Java</span><span class="tag tn">MediaPipe</span></div>
+          </div>
+          <div class="card">
+            <div class="sec-head"><div class="sec-title">🎓 Certifications</div><button class="btn bg bsm edit-only" onclick="openM('mAddCert')">+ Add</button></div>
+            <div class="cert-list">
+              <div class="cert-item"><span>⏳</span><div><div class="cert-n">Microsoft PL-300</div><div class="cert-p">Microsoft</div></div><span class="tag ta">In Progress</span></div>
+              <div class="cert-item"><span>⏳</span><div><div class="cert-n">Databricks DE Associate</div><div class="cert-p">Databricks</div></div><span class="tag ta">In Progress</span></div>
+              <div class="cert-item"><span>📅</span><div><div class="cert-n">Databricks GenAI Eng.</div><div class="cert-p">Databricks</div></div><span class="tag tn">Planned</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:1.2rem">
+          <div class="sec-head"><div class="sec-title">🏗 Projects</div><button class="btn bp bsm edit-only" onclick="openM('mAddProject')">+ Add Project</button></div>
+          <div class="ptabs"><button class="ptab on" onclick="swProjTab('solo',this)">Solo</button><button class="ptab" onclick="swProjTab('team',this)">Team</button></div>
+          <div id="psolo" class="plist">
+            <div class="pcard">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.7rem;margin-bottom:.45rem"><div><div class="pcard-n">GazeSpeak — AAC Communication Tool</div><div style="display:flex;gap:.28rem;margin-top:.18rem"><span class="tag tg">Shipped</span><span class="tag tn">Accessibility</span></div></div></div>
+              <div class="pcard-d">Webcam-only head-tracking communication app for people with limited mobility. Built for a real person — runs entirely in the browser, no hardware needed.</div>
+              <div class="pcard-tags"><span class="tag tn">MediaPipe</span><span class="tag tn">Vanilla JS</span><span class="tag tn">WebRTC</span></div>
+              <div class="pcard-foot"><div class="pcard-meta"><div class="pcard-mi">📅 3 weeks</div><div class="pcard-mi">👤 Solo</div><div class="pcard-mi">✅ Real user</div></div><div class="pcard-links"><button class="plbtn" onclick="toast('🔗 Opening GitHub...')">⌥ GitHub</button><button class="plbtn" onclick="toast('🌐 Opening demo...')">↗ Demo</button></div></div>
+            </div>
+            <div class="pcard">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.7rem;margin-bottom:.45rem"><div><div class="pcard-n">CCTV Narrative Analysis System</div><div style="display:flex;gap:.28rem;margin-top:.18rem"><span class="tag ta">In Progress</span><span class="tag tn">AI / Vision</span></div></div></div>
+              <div class="pcard-d">Gemini 2.0 Flash pipeline that analyses CCTV footage and generates structured natural language incident reports. Uses YOLO + ByteTrack preprocessing.</div>
+              <div class="pcard-tags"><span class="tag tn">Python</span><span class="tag tn">Gemini API</span><span class="tag tn">YOLO</span><span class="tag tn">React</span></div>
+              <div class="pcard-foot"><div class="pcard-meta"><div class="pcard-mi">📅 Ongoing</div><div class="pcard-mi">👤 Solo</div></div><div class="pcard-links"><button class="plbtn" onclick="toast('🔗 Opening GitHub...')">⌥ GitHub</button></div></div>
+            </div>
+            <button class="add-btn edit-only" onclick="openM('mAddProject')">＋ Add a solo project</button>
+          </div>
+          <div id="pteam" class="plist" style="display:none">
+            <div class="pcard">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.7rem;margin-bottom:.45rem"><div><div class="pcard-n">RentWatch Melbourne</div><div style="display:flex;gap:.28rem;margin-top:.18rem"><span class="tag tb">Active · Sprint 2</span><span class="tag tn">Data / Civic Tech</span></div></div><span class="rpill">Backend Dev</span></div>
+              <div class="pcard-d">Real-time rental data pipeline and suburb affordability dashboard. Shows rent as a % of student income. Team of 4, Sprint 2 of 6.</div>
+              <div class="pcard-tags"><span class="tag tn">FastAPI</span><span class="tag tn">PostgreSQL</span><span class="tag tn">Python</span><span class="tag tn">React</span></div>
+              <div class="pcard-foot"><div class="pcard-meta"><div class="pcard-mi">📅 6 weeks</div><div style="display:flex;align-items:center;gap:.32rem;font-size:.7rem;color:var(--ink3)"><div class="team-avas"><div class="tava" style="background:#7c3aed">MN</div><div class="tava" style="background:#d97706">LW</div><div class="tava" style="background:#db2777">IP</div></div>3 teammates</div></div><div class="pcard-links"><button class="plbtn" onclick="toast('🔗 Opening GitHub...')">⌥ GitHub</button></div></div>
+            </div>
+            <button class="add-btn edit-only" onclick="openM('mAddProject')">＋ Add a team project</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-head"><div class="sec-title">💬 Teammate Endorsements</div></div>
+          <div class="end-list">
+            <div class="end-card"><div class="end-q">Jake built the entire API layer for RentWatch independently, handled blockers without hand-holding, and always kept the team informed. Exactly the backend dev you want.</div><div class="end-auth"><div class="end-ava" style="background:#2155e8">MN</div><div><div class="end-n">Mia Nguyen</div><div class="end-s">Data Engineer · RentWatch</div></div><div class="end-p">RentWatch</div></div></div>
+            <div class="end-card"><div class="end-q">Solid communicator — always posted updates before standup, flagged issues early, and helped me understand the backend well enough to connect the frontend properly.</div><div class="end-auth"><div class="end-ava" style="background:#d97706">LW</div><div><div class="end-n">Lachlan Webb</div><div class="end-s">Frontend Dev · RentWatch</div></div><div class="end-p">RentWatch</div></div></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="ideas-body">
-      <div class="ilist">
-
-        <div class="card icard">
-          <div class="icard-inner">
-            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">94</span><span class="vw">votes</span></div>
-            <div class="ibody">
-              <div class="ihead"><div class="ititle">Visa Condition & Deadline Tracker</div><span class="tag tgreen">🏗 Forming</span></div>
-              <div class="idesc">International students miss visa conditions or deadlines because reminders are buried in legal documents. A smart plain-English reminder app that actually makes sense.</div>
-              <div class="itags"><span class="tag tg">Mobile</span><span class="tag tg">Notifications</span><span class="tag tg">Gov API</span></div>
-              <div class="ifooter">
-                <div class="imeta"><div class="iava" style="background:var(--gold)">TH</div><span>Tom H. · RMIT · 2 days ago</span></div>
-                <div class="iactions">
-                  <div style="display:flex;align-items:center;gap:0.35rem">
-                    <div class="iavas"><div class="iava2" style="background:var(--green)">CP</div><div class="iava2" style="background:var(--blue)">LW</div><div class="iava2" style="background:var(--red)">PR</div></div>
-                    <span class="icount">3 interested</span>
-                  </div>
-                  <button class="intbtn" onclick="showInt(this,'Visa Tracker')">👋 I'm Interested</button>
+    <!-- ── IDEAS ── -->
+    <div id="ideas" class="page">
+      <div class="wrap">
+        <div class="itopbar">
+          <div><h2>Build something <em>worth building.</em></h2><p>Post a problem. Find people who care. Build it together.</p></div>
+          <button class="btn bp" onclick="openM('mPostIdea')">+ Post an Idea</button>
+        </div>
+        <div class="filters">
+          <button class="fchip on">All</button><button class="fchip">🔥 Most Voted</button><button class="fchip">🆕 Newest</button><button class="fchip">🏗 Team Forming</button><button class="fchip">🚀 Shipped</button>
+        </div>
+        <div class="ilayout">
+          <div class="ilist">
+            <div class="card">
+              <div class="icard-inner">
+                <div class="ivote" onclick="tv(this)"><span class="va">▲</span><span class="vc">94</span><span class="vw">votes</span></div>
+                <div class="ibody">
+                  <div class="ihead"><div class="ititle">Visa Condition & Deadline Tracker</div><span class="tag tg">🏗 Forming</span></div>
+                  <div class="idesc">International students miss visa conditions or deadlines because reminders are buried in legal documents. A smart plain-English reminder app that actually makes sense to students.</div>
+                  <div class="itags"><span class="tag tn">Mobile</span><span class="tag tn">Notifications</span><span class="tag tn">Gov API</span></div>
+                  <div class="ifooter"><div class="imeta"><div class="iava" style="background:#d97706">TH</div><span>Tom H. · RMIT · 2d ago</span></div><div class="iactions"><div style="display:flex;align-items:center;gap:.3rem"><div class="iavas"><div class="iava2" style="background:#2155e8">MN</div><div class="iava2" style="background:#7c3aed">LW</div><div class="iava2" style="background:#db2777">IP</div></div><span class="icount">3 interested</span></div><button class="intbtn" onclick="showInt(this,'Visa Tracker')">👋 Interested</button></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="icard-inner">
+                <div class="ivote" onclick="tv(this)"><span class="va">▲</span><span class="vc">71</span><span class="vw">votes</span></div>
+                <div class="ibody">
+                  <div class="ihead"><div class="ititle">AI Resume Gap Analyser — Melbourne IT Jobs</div><span class="tag ta">Open</span></div>
+                  <div class="idesc">Upload a job description, get a gap analysis against your skills with a personalised learning roadmap. Tuned specifically for Melbourne's IT market expectations.</div>
+                  <div class="itags"><span class="tag tn">AI/NLP</span><span class="tag tn">Career</span><span class="tag tn">Melbourne</span></div>
+                  <div class="ifooter"><div class="imeta"><div class="iava" style="background:#2155e8">JM</div><span>Jake M. · RMIT · 5d ago</span></div><div class="iactions"><div style="display:flex;align-items:center;gap:.3rem"><div class="iavas"><div class="iava2" style="background:#16a34a">CT</div></div><span class="icount">1 interested</span></div><button class="intbtn" onclick="showInt(this,'Resume Analyser')">👋 Interested</button></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="icard-inner">
+                <div class="ivote on" onclick="tv(this)"><span class="va" style="color:var(--accent)">▲</span><span class="vc" style="color:var(--accent)">58</span><span class="vw">votes</span></div>
+                <div class="ibody">
+                  <div class="ihead"><div class="ititle">Study Group Matcher by Subject & Schedule</div><span class="tag tn">Open</span></div>
+                  <div class="idesc">Students can't easily find others in the same subject with compatible free time. Enter your subjects and schedule, get matched with nearby study partners automatically.</div>
+                  <div class="itags"><span class="tag tn">Matching</span><span class="tag tn">Scheduling</span><span class="tag tn">Social</span></div>
+                  <div class="ifooter"><div class="imeta"><div class="iava" style="background:#16a34a">CT</div><span>Chloe T. · UniMelb · 1w ago</span></div><div class="iactions"><button class="intbtn on">✓ Interested</button></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="icard-inner">
+                <div class="ivote" onclick="tv(this)"><span class="va">▲</span><span class="vc">112</span><span class="vw">votes</span></div>
+                <div class="ibody">
+                  <div class="ihead"><div class="ititle">Browser-Based AAC Communication Tool</div><span class="tag tb">🚀 Shipped</span></div>
+                  <div class="idesc">Webcam-only head-tracking app for people with limited mobility. No hardware, no install. Built for a real user, open sourced for the community.</div>
+                  <div class="itags"><span class="tag tn">Accessibility</span><span class="tag tn">MediaPipe</span><span class="tag tn">JS</span></div>
+                  <div class="ifooter"><div class="imeta"><div class="iava" style="background:#2155e8">JM</div><span>Jake M. · RMIT · 3w ago</span></div><div class="iactions"><span style="font-size:.7rem;color:var(--accent);font-weight:600">★ Viewed by 2 companies</span></div></div>
                 </div>
               </div>
             </div>
           </div>
+          <div>
+            <div class="isb-sticky">
+              <div class="post-cta" onclick="openM('mPostIdea')">
+                <h3>Got a problem worth solving?</h3>
+                <p>Post it here. If others connect with it, a team forms naturally — no applications, no rejections.</p>
+                <button class="post-cta-btn">Post Your Idea →</button>
+              </div>
+              <div class="card">
+                <div class="sh">Teams Forming Now</div>
+                <div class="fi-item"><div class="fi-name">Visa Condition Tracker</div><div class="fi-sub">3 interested · needs Frontend</div></div>
+                <div class="fi-item"><div class="fi-name">Campus Food Waste Logger</div><div class="fi-sub">2 interested · needs Backend</div></div>
+                <div class="fi-item"><div class="fi-name">Student Budget Companion</div><div class="fi-sub">4 interested · team full</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TEAM ── -->
+    <div id="team" class="page">
+      <div class="wrap">
+        <div class="tswitcher">
+          <button class="tsbtn on" id="ts-rw" onclick="swTeam('rw',this)">📊 RentWatch</button>
+          <button class="tsbtn" id="ts-et" onclick="swTeam('et',this)">🌱 EcoTrack</button>
+          <button class="tsadd" onclick="go('ideas',document.querySelectorAll('.sbi')[2])">＋ Join a team</button>
         </div>
 
-        <div class="card icard">
-          <div class="icard-inner">
-            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">71</span><span class="vw">votes</span></div>
-            <div class="ibody">
-              <div class="ihead"><div class="ititle">AI Resume Gap Analyser — Melbourne IT Jobs</div><span class="tag tgold">Open</span></div>
-              <div class="idesc">Upload a job description, get a skills gap analysis vs what Melbourne companies actually want — with a personalised learning roadmap to close the gap.</div>
-              <div class="itags"><span class="tag tg">AI/NLP</span><span class="tag tg">Career</span><span class="tag tg">Melbourne</span></div>
-              <div class="ifooter">
-                <div class="imeta"><div class="iava" style="background:var(--blue)">JN</div><span>Jamie N. · RMIT · 5 days ago</span></div>
-                <div class="iactions">
-                  <div style="display:flex;align-items:center;gap:0.35rem">
-                    <div class="iavas"><div class="iava2" style="background:var(--green)">MK</div></div>
-                    <span class="icount">1 interested</span>
-                  </div>
-                  <button class="intbtn" onclick="showInt(this,'Resume Analyser')">👋 I'm Interested</button>
-                </div>
+        <!-- RentWatch -->
+        <div id="tw-rw">
+          <div class="thead">
+            <div><div class="tpname">RentWatch Melbourne</div><div class="tpsub">Team of 4 · Started from a Firstwork idea · Week 3 of 6</div></div>
+            <button class="btn bp bsm" onclick="openM('mUpdate')">+ Share Update</button>
+          </div>
+          <div class="mbrs">
+            <div class="mbr" onclick="openProf('Jake Morrison','Backend Dev','Python, FastAPI, Azure','JM','linear-gradient(135deg,#2155e8,#7c3aed)')"><div class="mava" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><div><div class="mname">Jake Morrison</div><div class="mrole">Backend Dev</div></div><div class="monline" style="background:var(--green)"></div></div>
+            <div class="mbr" onclick="openProf('Mia Nguyen','Data Engineer','dbt, Snowflake, SQL','MN','linear-gradient(135deg,#7c3aed,#db2777)')"><div class="mava" style="background:linear-gradient(135deg,#7c3aed,#db2777)">MN</div><div><div class="mname">Mia Nguyen</div><div class="mrole">Data Engineer</div></div><div class="monline" style="background:var(--green)"></div></div>
+            <div class="mbr" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LW','linear-gradient(135deg,#d97706,#ea580c)')"><div class="mava" style="background:linear-gradient(135deg,#d97706,#ea580c)">LW</div><div><div class="mname">Lachlan Webb</div><div class="mrole">Frontend Dev</div></div><div class="monline" style="background:var(--ink3)"></div></div>
+            <div class="mbr" onclick="openProf('Isabelle Park','Product Manager','Figma, Research, Notion','IP','linear-gradient(135deg,#db2777,#9333ea)')"><div class="mava" style="background:linear-gradient(135deg,#db2777,#9333ea)">IP</div><div><div class="mname">Isabelle Park</div><div class="mrole">Product Manager</div></div><div class="monline" style="background:var(--green)"></div></div>
+          </div>
+          <div class="tlayout">
+            <div>
+              <div class="ubox">
+                <div class="ubox-top"><div class="uava-sm" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><textarea class="uinput" id="ui1" placeholder="Share what you worked on, a blocker, or a win…"></textarea></div>
+                <div class="ubox-foot"><button class="btn bp bsm" onclick="doU('ui1')">Share →</button></div>
+              </div>
+              <div class="ufeed">
+                <div class="uitem"><div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><div class="uline"></div></div><div class="ubody"><div class="uhead"><span class="uauthor">Jake Morrison</span><span class="tag tn" style="font-size:.6rem">Backend</span><span class="utime">2h ago</span></div><div class="utext">FastAPI endpoints for rental data done and tested. Connected to Mia's PostgreSQL schema. Ready for Lachlan to hook up the map component.</div><div class="ufile">📎 api_endpoints.md</div><div class="ureacts"><div class="react" onclick="ir(this)">🔥 3</div><div class="react" onclick="ir(this)">✅ 2</div></div></div></div>
+                <div class="uitem"><div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#7c3aed,#db2777)">MN</div><div class="uline"></div></div><div class="ubody"><div class="uhead"><span class="uauthor">Mia Nguyen</span><span class="tag tn" style="font-size:.6rem">Data Eng</span><span class="utime">Yesterday</span></div><div class="utext">Finished historical price trends across 50 Melbourne suburbs. Interesting patterns around St Kilda and Footscray — presenting Friday standup.</div><div class="ureacts"><div class="react" onclick="ir(this)">🚀 4</div><div class="react" onclick="ir(this)">👏 2</div></div></div></div>
+                <div class="uitem"><div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#db2777,#9333ea)">IP</div></div><div class="ubody"><div class="uhead"><span class="uauthor">Isabelle Park</span><span class="tag tn" style="font-size:.6rem">PM</span><span class="utime">2 days ago</span></div><div class="utext">Interviewed 5 students. Key insight: they want rent as % of Austudy/min wage — not absolute prices. Updating Lachlan's brief now.</div><div class="ufile">📎 user_research_notes.pdf</div><div class="ureacts"><div class="react" onclick="ir(this)">💡 5</div><div class="react" onclick="ir(this)">❤️ 3</div></div></div></div>
+              </div>
+            </div>
+            <div>
+              <div class="tsb-sticky">
+                <div class="origin-card"><div class="origin-l">💡 Started from a Firstwork idea</div><div class="origin-t">Melbourne Rent Affordability for Students</div><div class="origin-s">94 votes · Team formed in 3 days</div></div>
+                <div class="card"><div class="sh">Progress</div><div class="prog-list"><div class="pi done">✅ Project setup & repo</div><div class="pi done">✅ Database schema designed</div><div class="pi done">✅ API endpoints built</div><div class="pi cur">🔄 Frontend map (in progress)</div><div class="pi">⬜ Deploy to production</div><div class="pi">⬜ Showcase on Firstwork</div></div></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card icard">
-          <div class="icard-inner">
-            <div class="ivote on" onclick="toggleVote(this)"><span class="va" style="color:var(--gold)">▲</span><span class="vc" style="color:var(--gold)">58</span><span class="vw">votes</span></div>
-            <div class="ibody">
-              <div class="ihead"><div class="ititle">Study Group Matcher by Subject & Schedule</div><span class="tag tg">Open</span></div>
-              <div class="idesc">Students can't easily find others in the same subject with compatible schedules. A matching tool — enter subjects and free slots, get matched with nearby study partners.</div>
-              <div class="itags"><span class="tag tg">Matching</span><span class="tag tg">Scheduling</span><span class="tag tg">Social</span></div>
-              <div class="ifooter">
-                <div class="imeta"><div class="iava" style="background:#c4622a">CT</div><span>Chloe T. · UniMelb · 1 week ago</span></div>
-                <div class="iactions">
-                  <button class="intbtn on">✓ Interested</button>
-                </div>
+        <!-- EcoTrack -->
+        <div id="tw-et" style="display:none">
+          <div class="thead">
+            <div><div class="tpname">EcoTrack Melbourne</div><div class="tpsub">Team of 3 · Started from a Firstwork idea · Week 1 of 6</div></div>
+            <button class="btn bp bsm" onclick="openM('mUpdate')">+ Share Update</button>
+          </div>
+          <div class="mbrs">
+            <div class="mbr" onclick="openProf('Jake Morrison','Backend Dev','Python, FastAPI, Azure','JM','linear-gradient(135deg,#2155e8,#7c3aed)')"><div class="mava" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><div><div class="mname">Jake Morrison</div><div class="mrole">Backend Dev</div></div><div class="monline" style="background:var(--green)"></div></div>
+            <div class="mbr" onclick="openProf('Chloe Tran','Frontend Dev','React, Vue, CSS','CT','linear-gradient(135deg,#16a34a,#0891b2)')"><div class="mava" style="background:linear-gradient(135deg,#16a34a,#0891b2)">CT</div><div><div class="mname">Chloe Tran</div><div class="mrole">Frontend Dev</div></div><div class="monline" style="background:var(--green)"></div></div>
+            <div class="mbr" onclick="openProf('Finn O\'Brien','Data Analyst','Python, SQL, Tableau','FO','linear-gradient(135deg,#0891b2,#2155e8)')"><div class="mava" style="background:linear-gradient(135deg,#0891b2,#2155e8)">FO</div><div><div class="mname">Finn O'Brien</div><div class="mrole">Data Analyst</div></div><div class="monline" style="background:var(--ink3)"></div></div>
+          </div>
+          <div class="tlayout">
+            <div>
+              <div class="ubox">
+                <div class="ubox-top"><div class="uava-sm" style="background:linear-gradient(135deg,#2155e8,#7c3aed)">JM</div><textarea class="uinput" id="ui2" placeholder="Share what you worked on, a blocker, or a win…"></textarea></div>
+                <div class="ubox-foot"><button class="btn bp bsm" onclick="doU('ui2')">Share →</button></div>
+              </div>
+              <div class="ufeed">
+                <div class="uitem"><div class="uava-col"><div class="uava-sm" style="background:linear-gradient(135deg,#16a34a,#0891b2)">CT</div></div><div class="ubody"><div class="uhead"><span class="uauthor">Chloe Tran</span><span class="tag tn" style="font-size:.6rem">Frontend</span><span class="utime">1h ago</span></div><div class="utext">Set up the repo and initial React scaffold. Created shared component folder. Ready for Jake to wire up the API once backend is ready.</div><div class="ureacts"><div class="react" onclick="ir(this)">🚀 2</div></div></div></div>
+              </div>
+            </div>
+            <div>
+              <div class="tsb-sticky">
+                <div class="origin-card"><div class="origin-l">💡 Started from a Firstwork idea</div><div class="origin-t">Campus Food Waste Logger</div><div class="origin-s">58 votes · Team formed in 5 days</div></div>
+                <div class="card"><div class="sh">Progress</div><div class="prog-list"><div class="pi done">✅ Project setup & repo</div><div class="pi cur">🔄 Planning & wireframes</div><div class="pi">⬜ Backend API</div><div class="pi">⬜ Frontend dashboard</div><div class="pi">⬜ Deploy & showcase</div></div></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card icard">
-          <div class="icard-inner">
-            <div class="ivote" onclick="toggleVote(this)"><span class="va">▲</span><span class="vc">112</span><span class="vw">votes</span></div>
-            <div class="ibody">
-              <div class="ihead"><div class="ititle">Browser-Based AAC Communication Tool</div><span class="tag tblue">🚀 Shipped</span></div>
-              <div class="idesc">Webcam-only head-tracking app for people with limited mobility to communicate. No hardware, no install. Built for a real user, now open sourced for the community.</div>
-              <div class="itags"><span class="tag tg">Accessibility</span><span class="tag tg">MediaPipe</span><span class="tag tg">JS</span></div>
-              <div class="ifooter">
-                <div class="imeta"><div class="iava" style="background:var(--gold)">JN</div><span>Jamie N. · RMIT · 3 weeks ago</span></div>
-                <div class="iactions"><span style="font-size:0.72rem;color:var(--blue)">★ Viewed by 2 industry partners</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="isidebar">
-        <div class="isticky">
-          <div class="post-cta" onclick="openM('mPostIdea')">
-            <h3>Have a problem worth solving?</h3>
-            <p>Post it here. If others connect with it, a team forms naturally — no applications, no rejections.</p>
-            <button class="post-cta-btn">Post Your Idea →</button>
-          </div>
-          <div class="card">
-            <div class="sh">Teams Forming Now</div>
-            <div class="forming-item"><div class="forming-name">Visa Condition Tracker</div><div class="forming-sub">3 interested · needs Frontend dev</div></div>
-            <div class="forming-item"><div class="forming-name">Campus Food Waste Logger</div><div class="forming-sub">2 interested · needs Backend</div></div>
-            <div class="forming-item"><div class="forming-name">Student Budget Companion</div><div class="forming-sub">4 interested · team full</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ TEAM ═══════ -->
-<div id="team" class="page">
-  <div class="wrap">
-    <div class="team-top">
-      <div>
-        <div class="team-pname">RentWatch Melbourne</div>
-        <div class="team-psub">Team of 4 · Started from a Firstwork idea · Week 3</div>
-      </div>
-      <button class="btn btn-gold" onclick="openM('mUpdate')">+ Share Update</button>
-    </div>
-
-    <div class="mbrs">
-      <div class="mbr" onclick="openProf('Jamie Nguyen','Backend Dev','Python, FastAPI, Azure','JN','linear-gradient(135deg,var(--gold),#c4622a)')">
-        <div class="mava" style="background:linear-gradient(135deg,var(--gold),#c4622a)">JN</div>
-        <div><div class="mname">Jamie Nguyen</div><div class="mrole">Backend Dev</div></div>
-        <div class="monline" style="background:var(--green)"></div>
-      </div>
-      <div class="mbr" onclick="openProf('Chloe Pham','Data Engineer','dbt, Snowflake, SQL','CP','linear-gradient(135deg,#818cf8,#f472b6)')">
-        <div class="mava" style="background:linear-gradient(135deg,#818cf8,#f472b6)">CP</div>
-        <div><div class="mname">Chloe Pham</div><div class="mrole">Data Engineer</div></div>
-        <div class="monline" style="background:var(--green)"></div>
-      </div>
-      <div class="mbr" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LM','linear-gradient(135deg,#fbbf24,#f97316)')">
-        <div class="mava" style="background:linear-gradient(135deg,#fbbf24,#f97316)">LW</div>
-        <div><div class="mname">Lachlan Webb</div><div class="mrole">Frontend Dev</div></div>
-        <div class="monline" style="background:var(--muted2)"></div>
-      </div>
-      <div class="mbr" onclick="openProf('Priya Rao','Product Manager','Figma, Research, Notion','PR','linear-gradient(135deg,#f472b6,#a855f7)')">
-        <div class="mava" style="background:linear-gradient(135deg,#f472b6,#a855f7)">PR</div>
-        <div><div class="mname">Priya Rao</div><div class="mrole">Product Manager</div></div>
-        <div class="monline" style="background:var(--green)"></div>
       </div>
     </div>
 
-    <div class="team-body">
-      <div>
-        <div class="update-box">
-          <div class="update-box-top">
-            <div class="uava" style="background:linear-gradient(135deg,var(--gold),#c4622a);border-radius:50%;flex-shrink:0">JN</div>
-            <textarea class="uinput" placeholder="Share what you worked on, a blocker, or a win…" id="uinput"></textarea>
-          </div>
-          <div class="ub-bottom"><button class="btn btn-light btn-sm" onclick="doUpdate()">Share with team →</button></div>
-        </div>
+  </main>
+</div><!-- end appWrap -->
 
-        <div class="ufeed">
-          <div class="uitem">
-            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,var(--gold),#c4622a)">JN</div><div class="uline"></div></div>
-            <div class="ubody">
-              <div class="uhead"><span class="uauthor">Jamie Nguyen</span><span class="tag tg" style="font-size:0.62rem">Backend</span><span class="utime">2h ago</span></div>
-              <div class="utext">FastAPI endpoints for rental data are done and tested. Connected to Mia's PostgreSQL schema. Ready for Lachlan to hook up the map component.</div>
-              <div class="ufile">📎 api_endpoints.md</div>
-              <div class="ureacts"><div class="react">🔥 3</div><div class="react">✅ 2</div></div>
-            </div>
-          </div>
-          <div class="uitem">
-            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,#818cf8,#f472b6)">CP</div><div class="uline"></div></div>
-            <div class="ubody">
-              <div class="uhead"><span class="uauthor">Chloe Pham</span><span class="tag tg" style="font-size:0.62rem">Data Eng</span><span class="utime">Yesterday</span></div>
-              <div class="utext">Finished historical price trend analysis across 50 Melbourne suburbs. Interesting patterns around St Kilda and Footscray — presenting Friday standup.</div>
-              <div class="ureacts"><div class="react">🚀 4</div><div class="react">👏 2</div></div>
-            </div>
-          </div>
-          <div class="uitem">
-            <div class="uava-col"><div class="uava" style="background:linear-gradient(135deg,#f472b6,#a855f7)">PR</div></div>
-            <div class="ubody">
-              <div class="uhead"><span class="uauthor">Priya Rao</span><span class="tag tg" style="font-size:0.62rem">PM</span><span class="utime">2 days ago</span></div>
-              <div class="utext">Interviewed 5 students. Key insight: they don't care about absolute rent prices — they want rent as a % of Austudy/minimum wage. Updating Lachlan's brief now.</div>
-              <div class="ufile">📎 user_research_notes.pdf</div>
-              <div class="ureacts"><div class="react">💡 5</div><div class="react">❤️ 3</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="team-sidebar-sticky">
-          <div class="origin-card">
-            <div class="origin-label">💡 Started from a Firstwork idea</div>
-            <div class="origin-title">Melbourne Rent Affordability for Students</div>
-            <div class="origin-sub">94 votes · Team formed in 3 days · Week 3 of 6</div>
-          </div>
-          <div class="card">
-            <div class="sh">Progress</div>
-            <div class="progress-list">
-              <div class="prog-item done">✅ Project setup & repo</div>
-              <div class="prog-item done">✅ Database schema designed</div>
-              <div class="prog-item done">✅ API endpoints built</div>
-              <div class="prog-item active">🔄 Frontend map (in progress)</div>
-              <div class="prog-item">⬜ Deploy to production</div>
-              <div class="prog-item">⬜ Showcase on Firstwork</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ INTERNSHIPS ═══════ -->
-<div id="internships" class="page">
-  <div class="wrap">
-    <div class="intern-top">
-      <div class="intern-top-l">
-        <h1>Your work<br>opens <em>real doors.</em></h1>
-        <p>Companies post structured micro-internships. They discover you through your Firstwork profile — proof beats a resume every time.</p>
-      </div>
-      <span class="tag tgreen" style="font-size:0.75rem;padding:0.4rem 0.8rem">38 Partners Active</span>
-    </div>
-
-    <div class="filters" style="margin-bottom:1.5rem">
-      <button class="fchip on">All</button>
-      <button class="fchip">Data & Analytics</button>
-      <button class="fchip">Software Dev</button>
-      <button class="fchip">AI / ML</button>
-      <button class="fchip">Product & Design</button>
-      <button class="fchip">🔥 High Match</button>
-    </div>
-
-    <div class="intern-body">
-      <div class="ilist2">
-
-        <div class="interncard" onclick="toast('📋 Opening application for Deloitte Digital...')">
-          <div class="interncard-top">
-            <div class="company-logo" style="background:rgba(79,142,247,0.08)">🔷</div>
-            <div>
-              <div class="company-name">Deloitte Digital</div>
-              <div class="company-type">Consulting · Melbourne CBD</div>
-            </div>
-            <span class="tag tgreen" style="margin-left:auto">93% Match</span>
-          </div>
-          <div class="intern-title">Data Engineering Micro-Internship</div>
-          <div class="intern-desc">Work with our data team on a real client pipeline project over 4 weeks. You'll build ingestion jobs, write transformations in dbt, and present findings to the project lead. Structured mentorship included.</div>
-          <div class="intern-meta">
-            <div class="imeta2">📅 4 weeks</div>
-            <div class="imeta2">💰 $800 stipend</div>
-            <div class="imeta2">🏢 Hybrid</div>
-            <div class="imeta2">📍 Melbourne</div>
-          </div>
-          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
-            <span class="tag tg">Python</span><span class="tag tg">dbt</span><span class="tag tg">SQL</span><span class="tag tg">Azure</span>
-          </div>
-          <div class="intern-footer">
-            <div class="intern-match">
-              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
-              <div class="match-bar"><div class="match-fill" style="width:93%"></div></div>
-              <span class="match-pct">93%</span>
-            </div>
-            <button class="btn btn-gold btn-sm">Apply Now →</button>
-          </div>
-        </div>
-
-        <div class="interncard" onclick="toast('📋 Opening application for ANZ Bank Tech...')">
-          <div class="interncard-top">
-            <div class="company-logo" style="background:rgba(62,207,142,0.08)">🏦</div>
-            <div>
-              <div class="company-name">ANZ Bank Tech</div>
-              <div class="company-type">FinTech · Docklands</div>
-            </div>
-            <span class="tag tgold" style="margin-left:auto">78% Match</span>
-          </div>
-          <div class="intern-title">Backend API Development Project</div>
-          <div class="intern-desc">Join a squad working on internal banking APIs. Build, test, and document RESTful services in a real Agile environment. You'll attend standups, sprint planning, and retros alongside the full team.</div>
-          <div class="intern-meta">
-            <div class="imeta2">📅 6 weeks</div>
-            <div class="imeta2">💰 $1,200 stipend</div>
-            <div class="imeta2">🏢 On-site</div>
-            <div class="imeta2">📍 Docklands</div>
-          </div>
-          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
-            <span class="tag tg">FastAPI</span><span class="tag tg">Python</span><span class="tag tg">PostgreSQL</span><span class="tag tg">Docker</span>
-          </div>
-          <div class="intern-footer">
-            <div class="intern-match">
-              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
-              <div class="match-bar"><div class="match-fill" style="width:78%"></div></div>
-              <span class="match-pct">78%</span>
-            </div>
-            <button class="btn btn-gold btn-sm">Apply Now →</button>
-          </div>
-        </div>
-
-        <div class="interncard" onclick="toast('📋 Opening application for REA Group...')">
-          <div class="interncard-top">
-            <div class="company-logo" style="background:rgba(212,168,67,0.08)">🏠</div>
-            <div>
-              <div class="company-name">REA Group</div>
-              <div class="company-type">PropTech · Richmond</div>
-            </div>
-            <span class="tag tgold" style="margin-left:auto">85% Match</span>
-          </div>
-          <div class="intern-title">Data & Insights Analyst Project</div>
-          <div class="intern-desc">Analyse real property market data to surface actionable insights for the product team. Perfect for students with data engineering experience — your RentWatch-style work is directly relevant here.</div>
-          <div class="intern-meta">
-            <div class="imeta2">📅 4 weeks</div>
-            <div class="imeta2">💰 $900 stipend</div>
-            <div class="imeta2">🏢 Hybrid</div>
-            <div class="imeta2">📍 Richmond</div>
-          </div>
-          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.85rem">
-            <span class="tag tg">Python</span><span class="tag tg">SQL</span><span class="tag tg">Tableau / PBI</span>
-          </div>
-          <div class="intern-footer">
-            <div class="intern-match">
-              <span style="font-size:0.72rem;color:var(--muted2)">Profile match:</span>
-              <div class="match-bar"><div class="match-fill" style="width:85%"></div></div>
-              <span class="match-pct">85%</span>
-            </div>
-            <button class="btn btn-gold btn-sm">Apply Now →</button>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="intern-sidebar">
-        <div class="isticky2">
-          <div class="why-card">
-            <div class="why-title">Why companies choose Firstwork</div>
-            <div class="why-item"><span class="why-icon">✦</span><span>Students come with proven project work, not just a CV</span></div>
-            <div class="why-item"><span class="why-icon">✦</span><span>Profile match scores based on real skills — not self-reported claims</span></div>
-            <div class="why-item"><span class="why-icon">✦</span><span>Structured 4–6 week projects with clear deliverables</span></div>
-            <div class="why-item"><span class="why-icon">✦</span><span>Pipeline to full-time hiring from a diverse talent pool</span></div>
-          </div>
-
-          <div class="card">
-            <div class="sh">Industry Partners</div>
-            <div class="company-grid">
-              <div class="co-item"><span class="co-logo">🔷</span>Deloitte Digital</div>
-              <div class="co-item"><span class="co-logo">🏦</span>ANZ Tech</div>
-              <div class="co-item"><span class="co-logo">⚡</span>Atlassian</div>
-              <div class="co-item"><span class="co-logo">🏠</span>REA Group</div>
-              <div class="co-item"><span class="co-logo">🏥</span>Medibank</div>
-              <div class="co-item"><span class="co-logo">🛒</span>Coles Digital</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- end app -->
-
-<!-- MODALS -->
+<!-- ── MODALS ── -->
 <div class="overlay" id="mPostIdea">
   <div class="modal">
     <div class="mhead"><div class="mtitle">💡 Post an Idea</div><button class="mclose" onclick="closeM('mPostIdea')">✕</button></div>
     <div class="ff"><label class="fl">What's the problem?</label><input class="fi" type="text" placeholder="e.g. Students miss visa deadlines because reminders are confusing"></div>
     <div class="ff"><label class="fl">Describe it</label><textarea class="fi" placeholder="Who faces it? Why does it matter? What would a solution look like?"></textarea></div>
-    <div class="ff"><label class="fl">Category</label><select class="fi"><option>Social Impact</option><option>EdTech</option><option>FinTech</option><option>Sustainability</option><option>Accessibility</option><option>Developer Tools</option><option>Other</option></select></div>
-    <div class="ff"><label class="fl">Skills you'd need (optional)</label><input class="fi" type="text" placeholder="e.g. Frontend dev, someone who knows APIs"></div>
-    <div class="mfooter">
-      <button class="btn btn-ghost" onclick="closeM('mPostIdea')">Cancel</button>
-      <button class="btn btn-gold" onclick="closeM('mPostIdea');toast('💡 Idea posted! Others can now vote and show interest.')">Post to Board →</button>
-    </div>
+    <div class="fi-row"><div class="ff"><label class="fl">Category</label><select class="fi"><option>Social Impact</option><option>EdTech</option><option>FinTech</option><option>Sustainability</option><option>Accessibility</option><option>Other</option></select></div><div class="ff"><label class="fl">Skills needed</label><input class="fi" type="text" placeholder="e.g. Frontend, APIs"></div></div>
+    <div class="mfoot"><button class="btn bo" onclick="closeM('mPostIdea')">Cancel</button><button class="btn bp" onclick="closeM('mPostIdea');toast('💡 Idea posted! Others can now vote and show interest.')">Post →</button></div>
   </div>
 </div>
 
 <div class="overlay" id="mUpdate">
   <div class="modal">
     <div class="mhead"><div class="mtitle">📣 Share a Team Update</div><button class="mclose" onclick="closeM('mUpdate')">✕</button></div>
-    <div class="ff"><label class="fl">What did you work on?</label><textarea class="fi" placeholder="A progress update, a blocker, a win, a question for the team…" style="min-height:110px"></textarea></div>
-    <div class="ff"><label class="fl">Attach a link or file (optional)</label><input class="fi" type="text" placeholder="Paste a link or filename"></div>
-    <div class="mfooter">
-      <button class="btn btn-ghost" onclick="closeM('mUpdate')">Cancel</button>
-      <button class="btn btn-gold" onclick="closeM('mUpdate');toast('✅ Update shared with your team')">Share →</button>
-    </div>
+    <div class="ff"><label class="fl">What did you work on?</label><textarea class="fi" style="min-height:95px" placeholder="Progress, blockers, wins, questions for the team…"></textarea></div>
+    <div class="ff"><label class="fl">Attach a link or file (optional)</label><input class="fi" type="text" placeholder="Paste a URL or filename"></div>
+    <div class="mfoot"><button class="btn bo" onclick="closeM('mUpdate')">Cancel</button><button class="btn bp" onclick="closeM('mUpdate');toast('✅ Update shared with your team')">Share →</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="mAddProject">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle">🏗 Add a Project</div><button class="mclose" onclick="closeM('mAddProject')">✕</button></div>
+    <div class="ff"><label class="fl">Type</label><select class="fi"><option>Solo Project</option><option>Team Project</option></select></div>
+    <div class="ff"><label class="fl">Project Name</label><input class="fi" type="text" placeholder="e.g. Student Budget Tracker"></div>
+    <div class="ff"><label class="fl">Description</label><textarea class="fi" placeholder="What did you build? What problem does it solve?"></textarea></div>
+    <div class="fi-row"><div class="ff"><label class="fl">Your Role</label><input class="fi" type="text" placeholder="e.g. Backend Dev"></div><div class="ff"><label class="fl">Status</label><select class="fi"><option>In Progress</option><option>Shipped</option><option>Archived</option></select></div></div>
+    <div class="ff"><label class="fl">Tech Stack</label><input class="fi" type="text" placeholder="e.g. Python, React, PostgreSQL"></div>
+    <div class="ff"><label class="fl">GitHub Link (optional)</label><input class="fi" type="text" placeholder="https://github.com/..."></div>
+    <div class="mfoot"><button class="btn bo" onclick="closeM('mAddProject')">Cancel</button><button class="btn bp" onclick="closeM('mAddProject');toast('✅ Project added to your profile')">Add Project</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="mEditProfile">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle">✏️ Edit Profile</div><button class="mclose" onclick="closeM('mEditProfile')">✕</button></div>
+    <div class="fi-row"><div class="ff"><label class="fl">Full Name</label><input class="fi" value="Jake Morrison"></div><div class="ff"><label class="fl">University</label><input class="fi" value="RMIT University"></div></div>
+    <div class="fi-row"><div class="ff"><label class="fl">Degree</label><input class="fi" value="Bachelor of IT"></div><div class="ff"><label class="fl">Year</label><select class="fi"><option>Year 1</option><option selected>Year 2</option><option>Year 3</option><option>Graduate</option></select></div></div>
+    <div class="ff"><label class="fl">Headline</label><input class="fi" value="Software & Data Engineering"></div>
+    <div class="ff"><label class="fl">Bio</label><textarea class="fi">Second-year IT student at RMIT building real things with real teams.</textarea></div>
+    <div class="fi-row"><div class="ff"><label class="fl">GitHub</label><input class="fi" placeholder="github.com/username"></div><div class="ff"><label class="fl">LinkedIn</label><input class="fi" placeholder="linkedin.com/in/..."></div></div>
+    <div class="mfoot"><button class="btn bo" onclick="closeM('mEditProfile')">Cancel</button><button class="btn bp" onclick="closeM('mEditProfile');toast('✅ Profile updated')">Save</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="mAddCert">
+  <div class="modal">
+    <div class="mhead"><div class="mtitle">🎓 Add Certification</div><button class="mclose" onclick="closeM('mAddCert')">✕</button></div>
+    <div class="ff"><label class="fl">Certification</label><input class="fi" placeholder="e.g. AWS Solutions Architect Associate"></div>
+    <div class="ff"><label class="fl">Provider</label><input class="fi" placeholder="e.g. Amazon Web Services"></div>
+    <div class="fi-row"><div class="ff"><label class="fl">Status</label><select class="fi"><option>In Progress</option><option>Completed</option><option>Planned</option></select></div><div class="ff"><label class="fl">Date (if completed)</label><input class="fi" type="month"></div></div>
+    <div class="mfoot"><button class="btn bo" onclick="closeM('mAddCert')">Cancel</button><button class="btn bp" onclick="closeM('mAddCert');toast('✅ Certification added')">Add</button></div>
   </div>
 </div>
 
 <div class="overlay" id="mInterested">
   <div class="modal">
     <div class="mhead"><div class="mtitle" id="mIntTitle">People interested</div><button class="mclose" onclick="closeM('mInterested')">✕</button></div>
-    <p style="font-size:0.77rem;color:var(--muted2);margin-bottom:1rem">Click a profile to learn more. Reach out if you think you'd work well together.</p>
+    <p style="font-size:.75rem;color:var(--ink3);margin-bottom:.95rem">Click a profile to learn more. Reach out if you think you'd work well together.</p>
     <div>
-      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Chloe Pham','Data Engineer','dbt, Snowflake, SQL','AT','linear-gradient(135deg,#818cf8,#f472b6)')">
-        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#818cf8,#f472b6);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">CP</div>
-        <div><div style="font-size:0.83rem;font-weight:700">Chloe Pham</div><div style="font-size:0.72rem;color:var(--muted2)">Data Engineer · RMIT · dbt, Snowflake</div></div>
-        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LM','linear-gradient(135deg,#fbbf24,#f97316)')">
-        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#fbbf24,#f97316);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">LW</div>
-        <div><div style="font-size:0.83rem;font-weight:700">Lachlan Webb</div><div style="font-size:0.72rem;color:var(--muted2)">Frontend Dev · Monash · React, TypeScript</div></div>
-        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0;cursor:pointer" onclick="openProf('Priya Rao','Product Manager','Figma, Research, Notion','PR','linear-gradient(135deg,#f472b6,#a855f7)')">
-        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#f472b6,#a855f7);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:#0c0c0e;flex-shrink:0">PR</div>
-        <div><div style="font-size:0.83rem;font-weight:700">Priya Rao</div><div style="font-size:0.72rem;color:var(--muted2)">PM · UniMelb · Research, Figma</div></div>
-        <span style="margin-left:auto;color:var(--muted2);font-size:0.75rem">→</span>
-      </div>
+      <div style="display:flex;align-items:center;gap:.58rem;padding:.58rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Mia Nguyen','Data Engineer','dbt, Snowflake, SQL','MN','linear-gradient(135deg,#7c3aed,#db2777)')"><div style="width:31px;height:31px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#db2777);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;flex-shrink:0">MN</div><div><div style="font-size:.8rem;font-weight:700">Mia Nguyen</div><div style="font-size:.68rem;color:var(--ink3)">Data Engineer · RMIT</div></div><span style="margin-left:auto;color:var(--ink3);font-size:.72rem">→</span></div>
+      <div style="display:flex;align-items:center;gap:.58rem;padding:.58rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openProf('Lachlan Webb','Frontend Dev','React, TypeScript, Figma','LW','linear-gradient(135deg,#d97706,#ea580c)')"><div style="width:31px;height:31px;border-radius:8px;background:linear-gradient(135deg,#d97706,#ea580c);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;flex-shrink:0">LW</div><div><div style="font-size:.8rem;font-weight:700">Lachlan Webb</div><div style="font-size:.68rem;color:var(--ink3)">Frontend Dev · Monash</div></div><span style="margin-left:auto;color:var(--ink3);font-size:.72rem">→</span></div>
+      <div style="display:flex;align-items:center;gap:.58rem;padding:.58rem 0;cursor:pointer" onclick="openProf('Isabelle Park','Product Manager','Figma, Research, Notion','IP','linear-gradient(135deg,#db2777,#9333ea)')"><div style="width:31px;height:31px;border-radius:8px;background:linear-gradient(135deg,#db2777,#9333ea);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;flex-shrink:0">IP</div><div><div style="font-size:.8rem;font-weight:700">Isabelle Park</div><div style="font-size:.68rem;color:var(--ink3)">PM · UniMelb</div></div><span style="margin-left:auto;color:var(--ink3);font-size:.72rem">→</span></div>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="mProfile">
-  <div class="modal" style="max-width:400px">
+  <div class="modal" style="max-width:395px">
     <div class="mhead"><div class="mtitle">Profile</div><button class="mclose" onclick="closeM('mProfile')">✕</button></div>
-    <div class="pm-top">
-      <div class="pm-ava" id="pmAva"></div>
-      <div><div class="pm-name" id="pmName"></div><div class="pm-role" id="pmRole"></div><div id="pmTags" style="display:flex;gap:0.3rem;flex-wrap:wrap"></div></div>
-    </div>
-    <div class="pm-stats">
-      <div class="pmstat"><div class="pmstat-n">3</div><div class="pmstat-l">Projects</div></div>
-      <div class="pmstat"><div class="pmstat-n">6</div><div class="pmstat-l">Teammates</div></div>
-      <div class="pmstat"><div class="pmstat-n">78</div><div class="pmstat-l">Idea Votes</div></div>
-    </div>
-    <p style="font-size:0.74rem;color:var(--muted2);text-align:center;margin-bottom:1rem">Built 3 real projects · Played multiple roles</p>
-    <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="closeM('mProfile');toast('👋 Connection request sent!')">Connect & Build Together</button>
+    <div class="pm-top"><div class="pm-ava" id="pmAva"></div><div><div class="pm-name" id="pmName"></div><div class="pm-role" id="pmRole"></div><div id="pmTags" style="display:flex;gap:.28rem;flex-wrap:wrap;margin-top:.32rem"></div></div></div>
+    <div class="pm-stats"><div class="pmstat"><div class="pmstat-n">3</div><div class="pmstat-l">Projects</div></div><div class="pmstat"><div class="pmstat-n">6</div><div class="pmstat-l">Teammates</div></div><div class="pmstat"><div class="pmstat-n">78</div><div class="pmstat-l">Votes</div></div></div>
+    <p style="font-size:.72rem;color:var(--ink3);text-align:center;margin-bottom:.95rem">Built 3 real projects · Played multiple roles</p>
+    <button class="btn bp" style="width:100%;justify-content:center" onclick="closeM('mProfile');toast('👋 Connection request sent!')">Connect & Build Together</button>
   </div>
 </div>
 
 <script>
-const pages = document.querySelectorAll('.page');
-const tabs = document.querySelectorAll('.ntab');
-
-function go(id, btn) {
-  pages.forEach(p => p.classList.remove('active'));
-  tabs.forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (btn) btn.classList.add('active');
+// ── AUTH ──
+function showA(s) {
+  document.querySelectorAll('.ascreen').forEach(x => x.classList.remove('on'));
+  document.getElementById('a'+s).classList.add('on');
   window.scrollTo(0,0);
 }
 
-// Set landing tab active on load
-document.querySelectorAll('.ntab')[0].classList.add('active');
+function doRegister() {
+  const n = document.getElementById('regName').value.trim();
+  const e = document.getElementById('regEmail').value.trim();
+  const p = document.getElementById('regPass').value;
+  const p2 = document.getElementById('regPass2').value;
+  const err = document.getElementById('regErr');
+  if (!n || !e || !p) { err.textContent='Please fill in all fields.'; err.classList.add('on'); return; }
+  if (p.length < 8) { err.textContent='Password must be at least 8 characters.'; err.classList.add('on'); return; }
+  if (p !== p2) { err.textContent='Passwords do not match.'; err.classList.add('on'); return; }
+  err.classList.remove('on');
+  enterApp(n);
+}
 
+function doLogin() {
+  const e = document.getElementById('loginEmail').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginErr');
+  if (!e || !p) { err.textContent='Please enter your email and password.'; err.classList.add('on'); return; }
+  err.classList.remove('on');
+  enterApp('Jake Morrison');
+}
+
+function enterApp(name) {
+  document.body.classList.add('in');
+  document.getElementById('sbName').textContent = name;
+  document.getElementById('dashName').textContent = name.split(' ')[0];
+  document.getElementById('sbAva').textContent = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  go('dashboard', document.querySelector('.sbi'));
+  toast('👋 Welcome to Firstwork, ' + name.split(' ')[0] + '!');
+}
+
+function doLogout() {
+  document.body.classList.remove('in','pub');
+  showA('Landing');
+  toast('✅ Logged out successfully');
+}
+
+// ── APP NAV ──
+function go(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.sbi').forEach(s => s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if (el) el.classList.add('on');
+  const m = document.querySelector('.main');
+  if (m) m.scrollTo(0,0);
+}
+
+function goTeam(t, btn) {
+  go('team', null);
+  swTeam(t, null);
+  document.querySelectorAll('.sbi').forEach(s => s.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+}
+
+// ── PROFILE MODE ──
+function setMode(m) {
+  document.body.classList.toggle('pub', m === 'pub');
+  document.getElementById('btnEdit').classList.toggle('on', m === 'edit');
+  document.getElementById('btnPub').classList.toggle('on', m === 'pub');
+  if (m === 'pub') toast('👁 Public view — this is what recruiters see');
+}
+setMode('edit');
+
+// ── PROJECT TABS ──
+function swProjTab(t, btn) {
+  document.querySelectorAll('.ptab').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  const solo = document.getElementById('psolo');
+  const team = document.getElementById('pteam');
+  if (t === 'solo') { solo.style.display='flex'; solo.style.flexDirection='column'; team.style.display='none'; }
+  else { team.style.display='flex'; team.style.flexDirection='column'; solo.style.display='none'; }
+}
+
+// ── TEAM SWITCHER ──
+function swTeam(t, btn) {
+  document.getElementById('tw-rw').style.display = t==='rw' ? 'block' : 'none';
+  document.getElementById('tw-et').style.display = t==='et' ? 'block' : 'none';
+  document.querySelectorAll('.tsbtn').forEach(b => b.classList.remove('on'));
+  const tgt = document.getElementById('ts-'+t);
+  if (tgt) tgt.classList.add('on');
+  if (btn) { document.querySelectorAll('.tsbtn').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+}
+
+// ── MODALS ──
 function openM(id) { document.getElementById(id).classList.add('open'); }
 function closeM(id) { document.getElementById(id).classList.remove('open'); }
-
 document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
 
-function toggleVote(el) {
+// ── VOTE ──
+function tv(el) {
   el.classList.toggle('on');
   const vc = el.querySelector('.vc');
   const n = parseInt(vc.textContent);
   const on = el.classList.contains('on');
   vc.textContent = on ? n+1 : n-1;
-  el.querySelector('.va').style.color = on ? 'var(--gold)' : '';
-  vc.style.color = on ? 'var(--gold)' : '';
+  el.querySelector('.va').style.color = on ? 'var(--accent)' : '';
+  vc.style.color = on ? 'var(--accent)' : '';
 }
 
+// ── INTEREST ──
 function showInt(btn, name) {
   btn.classList.toggle('on');
-  btn.textContent = btn.classList.contains('on') ? '✓ Interested' : '👋 I\'m Interested';
+  btn.textContent = btn.classList.contains('on') ? '✓ Interested' : '👋 Interested';
   document.getElementById('mIntTitle').textContent = 'People interested in: ' + name;
-  setTimeout(() => openM('mInterested'), 250);
+  setTimeout(() => openM('mInterested'), 200);
 }
 
+// ── PROFILE MINI ──
 function openProf(name, role, skills, initials, grad) {
   document.getElementById('pmName').textContent = name;
   document.getElementById('pmRole').textContent = role;
-  const ava = document.getElementById('pmAva');
-  ava.textContent = initials; ava.style.background = grad;
-  const tags = document.getElementById('pmTags');
-  tags.innerHTML = skills.split(', ').map(s=>`<span class="tag tg">${s}</span>`).join('');
+  const a = document.getElementById('pmAva');
+  a.textContent = initials; a.style.background = grad;
+  document.getElementById('pmTags').innerHTML = skills.split(', ').map(s=>`<span class="tag tn">${s}</span>`).join('');
   closeM('mInterested');
   openM('mProfile');
 }
 
-function doUpdate() {
-  const inp = document.getElementById('uinput');
-  if (inp.value.trim()) { inp.value=''; toast('✅ Update shared with your team'); }
+// ── UPDATE ──
+function doU(id) {
+  const i = document.getElementById(id);
+  if (i.value.trim()) { i.value=''; toast('✅ Update shared with your team'); }
 }
 
-function toast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(()=>{ t.style.transition='opacity 0.3s'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 2800);
+// ── REACT ──
+function ir(el) {
+  const p = el.textContent.trim().split(' ');
+  el.textContent = p[0]+' '+(parseInt(p[1])+1);
 }
 
+// ── FILTERS ──
 document.querySelectorAll('.filters').forEach(f => {
   f.querySelectorAll('.fchip').forEach(c => c.addEventListener('click', function(){
     f.querySelectorAll('.fchip').forEach(x=>x.classList.remove('on'));
@@ -1221,10 +1068,15 @@ document.querySelectorAll('.filters').forEach(f => {
   }));
 });
 
-document.querySelectorAll('.react').forEach(r => r.addEventListener('click', function(){
-  const parts = this.textContent.trim().split(' ');
-  this.textContent = parts[0]+' '+(parseInt(parts[1])+1);
-}));
+// ── TOAST ──
+function toast(msg) {
+  const ex = document.querySelector('.toast');
+  if (ex) ex.remove();
+  const t = document.createElement('div');
+  t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .3s'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 2600);
+}
 </script>
 </body>
 </html>
